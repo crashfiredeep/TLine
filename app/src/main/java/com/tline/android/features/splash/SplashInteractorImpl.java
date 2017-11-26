@@ -39,7 +39,6 @@ public final class SplashInteractorImpl extends BaseInteractorImpl implements Sp
     @Override
     public void setSpalshDone() {
         mPreferencesUtils.putBoolean(PreferencesUtils.PrefKeys.IS_SPLASH_DONE.name(), true);
-
     }
 
 }
