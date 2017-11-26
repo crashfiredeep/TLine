@@ -1,21 +1,32 @@
 package com.tline.android.app.view.impl;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
+import android.widget.Toast;
 
+
+import com.tline.android.R;
 import com.tline.android.app.TLineApp;
-import com.tline.android.app.presenter.loader.PresenterFactory;
-import com.tline.android.app.presenter.loader.PresenterLoader;
 import com.tline.android.app.injection.AppComponent;
 import com.tline.android.app.presenter.BasePresenter;
+import com.tline.android.app.presenter.loader.PresenterFactory;
+import com.tline.android.app.presenter.loader.PresenterLoader;
+import com.tline.android.app.view.BaseView;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class BaseActivity<P extends BasePresenter<V>, V> extends AppCompatActivity implements LoaderManager.LoaderCallbacks<P> {
+import butterknife.ButterKnife;
+
+public abstract class BaseActivity<P extends BasePresenter<V>, V> extends AppCompatActivity implements BaseView, LoaderManager.LoaderCallbacks<P> {
     /**
      * Do we need to call {@link #doStart()} from the {@link #onLoadFinished(Loader, BasePresenter)} method.
      * Will be true if presenter wasn't loaded when {@link #onStart()} is reached
@@ -31,6 +42,8 @@ public abstract class BaseActivity<P extends BasePresenter<V>, V> extends AppCom
      */
     private boolean mFirstStart;
 
+    private ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +53,12 @@ public abstract class BaseActivity<P extends BasePresenter<V>, V> extends AppCom
         injectDependencies();
 
         getSupportLoaderManager().initLoader(0, null, this).startLoading();
+
+        setContentView(getContentView());
+
+        ButterKnife.bind(this);
+
+        onViewReady(savedInstanceState, getIntent());
     }
 
     private void injectDependencies() {
@@ -78,7 +97,6 @@ public abstract class BaseActivity<P extends BasePresenter<V>, V> extends AppCom
 
             mPresenter.onViewDetached();
         }
-
         super.onStop();
     }
 
@@ -115,4 +133,74 @@ public abstract class BaseActivity<P extends BasePresenter<V>, V> extends AppCom
      * @param appComponent the app component
      */
     protected abstract void setupComponent(@NonNull AppComponent appComponent);
+
+    @CallSuper
+    protected void onViewReady(Bundle savedInstanceState, Intent intent) {
+
+    }
+
+    protected abstract int getContentView();
+
+    protected void showBackArrow() {
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayShowHomeEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void showLoading() {
+        this.showLoading(getString(R.string.loading));
+    }
+
+    @Override
+    public void showLoading(String message) {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            mProgressDialog.setCancelable(true);
+        }
+        mProgressDialog.setMessage(message);
+        mProgressDialog.show();
+    }
+
+    @Override
+    public void hideLoading() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void showErrorWithMessage(String errorText) {
+        showToast(errorText);
+    }
+
+    @Override
+    public void showErrorLoading() {
+        showToast(getString(R.string.error_loading_data));
+    }
+
+    @Override
+    public void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showNetworkError() {
+        showToast(getString(R.string.error_no_network));
+    }
+
+    protected void showAbout() {
+        // Todo: show about dialog
+    }
 }
