@@ -7,6 +7,7 @@ import com.tline.android.BuildConfig;
 import com.tline.android.app.injection.AppComponent;
 import com.tline.android.app.injection.AppModule;
 import com.tline.android.app.injection.DaggerAppComponent;
+import com.twitter.sdk.android.core.Twitter;
 
 import timber.log.Timber;
 
@@ -25,6 +26,8 @@ public final class TLineApp extends Application {
         mAppComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .build();
+
+        Twitter.initialize(this);
     }
 
     @NonNull

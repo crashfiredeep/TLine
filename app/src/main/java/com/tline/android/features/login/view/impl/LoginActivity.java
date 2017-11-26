@@ -3,6 +3,12 @@ package com.tline.android.features.login.view.impl;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.tline.android.R;
 import com.tline.android.app.injection.AppComponent;
@@ -12,13 +18,41 @@ import com.tline.android.features.login.injection.DaggerLoginViewComponent;
 import com.tline.android.features.login.injection.LoginViewModule;
 import com.tline.android.features.login.presenter.LoginPresenter;
 import com.tline.android.features.login.view.LoginView;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.Session;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterApiClient;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.core.models.Tweet;
+import com.twitter.sdk.android.core.services.StatusesService;
 
 import javax.inject.Inject;
+
+import butterknife.BindView;
+import retrofit2.Call;
+import timber.log.Timber;
 
 public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView> implements LoginView {
 
     @Inject
     PresenterFactory<LoginPresenter> mPresenterFactory;
+
+    @BindView(R.id.imageView)
+    protected ImageView mUserDpImageView;
+
+    @BindView(R.id.textView_userName)
+    protected TextView mUserNameTextView;
+
+    @BindView(R.id.login_button)
+    protected TwitterLoginButton mLoginButton;
+
+    @BindView(R.id.sign_out_button)
+    protected Button mLogoutButton;
 
     @Override
     protected void setupComponent(@NonNull AppComponent parentComponent) {
@@ -45,6 +79,96 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
 
+        setButtonListeners();
+        test();
+
+
+
 
     }
+
+    private void test() {
+        TwitterApiClient twitterApiClient = TwitterCore.getInstance().getApiClient();
+        StatusesService statusesService = twitterApiClient.getStatusesService();
+        Call<Tweet> call = statusesService.show(524971209851543553L, null, null, null);
+        call.enqueue(new Callback<Tweet>() {
+            @Override
+            public void success(Result<Tweet> result) {
+                //Do something with result
+                Timber.i("R: "+result.data.text);
+            }
+
+            public void failure(TwitterException exception) {
+                Timber.i("E: "+exception.getMessage());
+            }
+        });
+    }
+
+    private void setButtonListeners() {
+
+        mLoginButton.setCallback(new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+                // Do something with result, which provides a TwitterSession for making API calls
+                Timber.i(result.data.getUserName());
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                // Do something on failure
+            }
+
+        });
+
+        mLogoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logout();
+                updateUi();
+            }
+        });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+       updateUi();
+    }
+
+
+    private void logout() {
+        CookieSyncManager.createInstance(this);
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.removeSessionCookie();
+        TwitterCore.getInstance().getSessionManager().clearActiveSession();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Pass the activity result to the login button.
+        mLoginButton.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    public void updateUi() {
+
+        TwitterSession activeSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
+
+        if (activeSession == null) {
+            mLogoutButton.setVisibility(View.GONE);
+            mLoginButton.setVisibility(View.VISIBLE);
+            mUserDpImageView.setBackgroundResource(R.drawable.ic_launcher_round_web);
+        }else {
+
+            mUserNameTextView.setText(getString(R.string.prompt_welcome_prefix, activeSession.getUserName()));
+            //ImageUtils.loadImage(this, mUserDpImageView, appUser.getPhotoUrl());
+            mLogoutButton.setVisibility(View.VISIBLE);
+            mLoginButton.setVisibility(View.GONE);
+        }
+
+    }
+
 }
