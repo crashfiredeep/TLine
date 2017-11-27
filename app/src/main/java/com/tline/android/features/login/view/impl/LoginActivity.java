@@ -3,6 +3,7 @@ package com.tline.android.features.login.view.impl;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -83,7 +84,10 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
         test();
 
 
-
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setLogo(R.mipmap.ic_launcher);
+        actionBar.setDisplayUseLogoEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
 
     }
 
