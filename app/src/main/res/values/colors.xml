@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!--<color name="colorPrimary">#3F51B5</color>-->
     <!--<color name="colorPrimaryDark">#303F9F</color>-->
     <!--<color name="colorAccent">#FF4081</color>-->
 
-    <color name="colorPrimary">#5c9bbb</color>
-    <color name="colorPrimaryDark">#335a6f</color>
+    <color name="colorPrimary">#28aae1</color>
+    <color name="colorPrimaryDark">#0c80b1</color>
+    <!--<color name="colorPrimaryDark">#0c80b1</color>-->
     <color name="colorAccent">#03394b</color>
     <color name="colorAccentDim">#4403394b</color>
     <color name="colorBackground">#EEEEEE</color>
+
+    <color name="tw__blue_default" tools:override="true">@color/colorPrimary</color>
+    <color name="tw__blue_pressed" tools:override="true">@color/colorPrimaryDark</color>
 </resources>
