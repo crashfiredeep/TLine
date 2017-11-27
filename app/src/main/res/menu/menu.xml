@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--<item-->
+        <!--android:id="@+id/action_language_en"-->
+        <!--android:title="@string/action_language_en"-->
+        <!--android:icon="@drawable/ic_action_language_en"-->
+        <!--app:showAsAction="always"/>-->
+
+    <!--<item-->
+        <!--android:id="@+id/action_language_ar"-->
+        <!--android:title="@string/action_language_ar"-->
+        <!--android:icon="@drawable/ic_action_language_ar"-->
+        <!--app:showAsAction="always"/>-->
+
+    <group android:title="@string/action_language" android:icon="@drawable/ic_action_language" android:checkableBehavior="single">
+
+            <item
+                app:showAsAction="always"
+                android:id="@+id/action_language_en"
+                android:checked="true"
+                android:visible="true"
+                android:title="@string/action_language_en"/>
+            <item
+                app:showAsAction="always"
+                android:visible="false"
+                android:id="@+id/action_language_ar"
+                android:title="@string/action_language_ar"/>
+
+    </group>
+
+
+    <item
+        android:id="@+id/action_logout"
+        android:title="@string/action_logout"
+        android:icon="@drawable/ic_nav_logout"
+        app:showAsAction="always"/>
+
+</menu>

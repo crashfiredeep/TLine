@@ -11,6 +11,8 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.widget.Toast;
 
 
@@ -21,6 +23,7 @@ import com.tline.android.app.presenter.BasePresenter;
 import com.tline.android.app.presenter.loader.PresenterFactory;
 import com.tline.android.app.presenter.loader.PresenterLoader;
 import com.tline.android.app.view.BaseView;
+import com.twitter.sdk.android.core.TwitterCore;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -211,5 +214,13 @@ public abstract class BaseActivity<P extends BasePresenter<V>, V> extends AppCom
 
     protected void showAbout() {
         // Todo: show about dialog
+    }
+
+    @Override
+    public void logoutTwitter() {
+        CookieSyncManager.createInstance(this);
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.removeSessionCookie();
+        TwitterCore.getInstance().getSessionManager().clearActiveSession();
     }
 }

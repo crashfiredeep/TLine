@@ -55,7 +55,7 @@ public final class LoginPresenterImpl extends BasePresenterImpl<LoginView> imple
     @Override
     public void logout() {
         assert mView != null;
-        mView.logout();
+        mView.logoutTwitter();
         mView.updateUi();
     }
 }

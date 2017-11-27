@@ -20,4 +20,6 @@ public interface BaseView {
     void showToast(String message);
 
     void showNetworkError();
+
+    void logoutTwitter();
 }

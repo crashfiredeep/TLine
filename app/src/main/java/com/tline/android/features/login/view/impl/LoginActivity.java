@@ -3,7 +3,6 @@ package com.tline.android.features.login.view.impl;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -33,7 +32,6 @@ import com.twitter.sdk.android.core.services.StatusesService;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import retrofit2.Call;
 import timber.log.Timber;
 
@@ -48,10 +46,10 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
     @BindView(R.id.textView_userName)
     protected TextView mUserNameTextView;
 
-    @BindView(R.id.login_button)
+    @BindView(R.id.button_login)
     protected TwitterLoginButton mLoginButton;
 
-    @BindView(R.id.log_out_button)
+    @BindView(R.id.button_logout)
     protected Button mLogoutButton;
 
     @Override
@@ -83,6 +81,10 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
         setButtonListeners();
 
         test();
+
+        if (TwitterCore.getInstance().getSessionManager().getActiveSession() != null) {
+            launchHomeActivity();
+        }
     }
 
     private void test() {
@@ -121,18 +123,10 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
         mLogoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                logout();
+                logoutTwitter();
                 updateUi();
             }
         });
-    }
-
-    @Override
-    public void logout() {
-        CookieSyncManager.createInstance(this);
-        CookieManager cookieManager = CookieManager.getInstance();
-        cookieManager.removeSessionCookie();
-        TwitterCore.getInstance().getSessionManager().clearActiveSession();
     }
 
     @Override
@@ -165,6 +159,7 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
     public void launchHomeActivity() {
         Intent intent = new Intent(this, TimelineActivity.class);
         startActivity(intent);
+        finish();
     }
 
     @Override
