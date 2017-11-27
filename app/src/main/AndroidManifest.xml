@@ -21,9 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".features.login.view.impl.LoginActivity"></activity>
-
+        <activity android:name=".features.login.view.impl.LoginActivity" />
+        <activity android:name=".features.timeline.view.impl.TimelineActivity" />
     </application>
 
 </manifest>

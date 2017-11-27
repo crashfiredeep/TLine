@@ -19,6 +19,7 @@ import com.tline.android.features.login.injection.DaggerLoginViewComponent;
 import com.tline.android.features.login.injection.LoginViewModule;
 import com.tline.android.features.login.presenter.LoginPresenter;
 import com.tline.android.features.login.view.LoginView;
+import com.tline.android.features.timeline.view.impl.TimelineActivity;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterApiClient;
@@ -162,7 +163,8 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
 
     @Override
     public void launchHomeActivity() {
-        // TODO: 27/11/2017 Show Home Activity
+        Intent intent = new Intent(this, TimelineActivity.class);
+        startActivity(intent);
     }
 
     @Override
