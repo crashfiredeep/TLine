@@ -10,6 +10,7 @@ import com.tline.android.R;
 import com.tline.android.app.injection.AppComponent;
 import com.tline.android.app.presenter.loader.PresenterFactory;
 import com.tline.android.app.view.impl.BaseActivity;
+import com.tline.android.features.login.view.impl.LoginActivity;
 
 import javax.inject.Inject;
 
@@ -65,7 +66,8 @@ public final class SplashActivity extends BaseActivity<SplashPresenter, SplashVi
 
     @Override
     public void launchNextActivity() {
-        // TODO: 26/11/2017 Launch next activity
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 
     @Override

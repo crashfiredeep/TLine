@@ -149,6 +149,15 @@ public abstract class BaseActivity<P extends BasePresenter<V>, V> extends AppCom
         }
     }
 
+    protected void setActionBarIcon(int ac_icon) {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setLogo(R.mipmap.ic_launcher);
+            actionBar.setDisplayUseLogoEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
