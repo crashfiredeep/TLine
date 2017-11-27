@@ -38,7 +38,7 @@ tools:context=".features.login.view.impl.LoginActivity">
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/sign_out_button"
+        android:id="@+id/log_out_button"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="@string/logout"

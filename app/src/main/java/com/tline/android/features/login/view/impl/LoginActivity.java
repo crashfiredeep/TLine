@@ -3,7 +3,7 @@ package com.tline.android.features.login.view.impl;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -21,13 +21,10 @@ import com.tline.android.features.login.presenter.LoginPresenter;
 import com.tline.android.features.login.view.LoginView;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
-import com.twitter.sdk.android.core.Session;
-import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterApiClient;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
-import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.services.StatusesService;
@@ -35,6 +32,7 @@ import com.twitter.sdk.android.core.services.StatusesService;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import retrofit2.Call;
 import timber.log.Timber;
 
@@ -52,7 +50,7 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
     @BindView(R.id.login_button)
     protected TwitterLoginButton mLoginButton;
 
-    @BindView(R.id.sign_out_button)
+    @BindView(R.id.log_out_button)
     protected Button mLogoutButton;
 
     @Override
@@ -80,15 +78,10 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
 
+        setActionBarIcon(R.mipmap.ic_launcher);
         setButtonListeners();
+
         test();
-
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setLogo(R.mipmap.ic_launcher);
-        actionBar.setDisplayUseLogoEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
-
     }
 
     private void test() {
@@ -99,11 +92,11 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
             @Override
             public void success(Result<Tweet> result) {
                 //Do something with result
-                Timber.i("R: "+result.data.text);
+                Timber.i("R: " + result.data.text);
             }
 
             public void failure(TwitterException exception) {
-                Timber.i("E: "+exception.getMessage());
+                Timber.i("E: " + exception.getMessage());
             }
         });
     }
@@ -113,13 +106,13 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
         mLoginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
-                // Do something with result, which provides a TwitterSession for making API calls
                 Timber.i(result.data.getUserName());
+                launchHomeActivity();
             }
 
             @Override
             public void failure(TwitterException exception) {
-                // Do something on failure
+                showLoginError(exception.getMessage());
             }
 
         });
@@ -131,17 +124,10 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
                 updateUi();
             }
         });
-
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-       updateUi();
-    }
-
-
-    private void logout() {
+    public void logout() {
         CookieSyncManager.createInstance(this);
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.removeSessionCookie();
@@ -156,7 +142,7 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
         mLoginButton.onActivityResult(requestCode, resultCode, data);
     }
 
-
+    @Override
     public void updateUi() {
 
         TwitterSession activeSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
@@ -165,14 +151,23 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
             mLogoutButton.setVisibility(View.GONE);
             mLoginButton.setVisibility(View.VISIBLE);
             mUserDpImageView.setBackgroundResource(R.drawable.ic_launcher_round_web);
-        }else {
+        } else {
 
             mUserNameTextView.setText(getString(R.string.prompt_welcome_prefix, activeSession.getUserName()));
             //ImageUtils.loadImage(this, mUserDpImageView, appUser.getPhotoUrl());
             mLogoutButton.setVisibility(View.VISIBLE);
             mLoginButton.setVisibility(View.GONE);
         }
+    }
 
+    @Override
+    public void launchHomeActivity() {
+        // TODO: 27/11/2017 Show Home Activity
+    }
+
+    @Override
+    public void showLoginError(String message) {
+        showErrorWithMessage(message);
     }
 
 }

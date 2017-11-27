@@ -11,6 +11,8 @@
     <color name="colorAccentDim">#4403394b</color>
     <color name="colorBackground">#EEEEEE</color>
 
+    <!--Overriding from TwitterKit -->
     <color name="tw__blue_default" tools:override="true">@color/colorPrimary</color>
     <color name="tw__blue_pressed" tools:override="true">@color/colorPrimaryDark</color>
+
 </resources>
