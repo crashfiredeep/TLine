@@ -38,14 +38,14 @@ tools:context=".features.login.view.impl.LoginActivity">
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/log_out_button"
+        android:id="@+id/button_logout"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="@string/logout"
         android:visibility="gone"/>
 
     <com.twitter.sdk.android.core.identity.TwitterLoginButton
-        android:id="@+id/login_button"
+        android:id="@+id/button_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"/>
