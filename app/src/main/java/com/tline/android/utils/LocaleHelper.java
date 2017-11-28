@@ -6,8 +6,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 
-import com.tline.android.features.splash.SplashActivity;
-import com.tline.android.features.timeline.view.impl.TimelineActivity;
+import com.tline.android.features.timeline.activity.view.impl.TimelineActivity;
 
 import java.util.Locale;
 

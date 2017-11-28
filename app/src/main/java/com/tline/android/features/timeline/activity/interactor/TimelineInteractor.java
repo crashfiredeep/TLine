@@ -1,4 +1,4 @@
-package com.tline.android.features.timeline.interactor;
+package com.tline.android.features.timeline.activity.interactor;
 
 import com.tline.android.app.interactor.BaseInteractor;
 

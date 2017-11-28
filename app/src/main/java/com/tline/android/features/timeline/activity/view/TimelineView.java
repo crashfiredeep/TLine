@@ -1,4 +1,4 @@
-package com.tline.android.features.timeline.view;
+package com.tline.android.features.timeline.activity.view;
 
 import android.support.annotation.UiThread;
 
