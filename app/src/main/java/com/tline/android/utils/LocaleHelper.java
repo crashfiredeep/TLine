@@ -19,21 +19,20 @@ import java.util.Locale;
 
 public class LocaleHelper {
 
-
     public static void switchLocale(Activity activity) {
-        Resources resources = activity.getApplicationContext().getResources();
+        Resources resources = activity.getResources();
         Configuration config = resources.getConfiguration();
-        Locale newLocale = getNewLocale(config);
-        config.locale = newLocale;
-        config.setLayoutDirection(newLocale);
+        Locale locale = getNewLocale(config);
+        config.locale = locale;
+        config.setLayoutDirection(locale);
         resources.updateConfiguration(config, resources.getDisplayMetrics());
-        relaunch(activity.getApplicationContext());
+        relaunch(activity);
     }
 
     private static Locale getNewLocale(Configuration configuration) {
-        if (configuration.locale.getLanguage().equals("ar")){
+        if (configuration.locale.getLanguage().equals("ar")) {
             return new Locale("en");
-        }else {
+        } else {
             return new Locale("ar");
         }
     }
