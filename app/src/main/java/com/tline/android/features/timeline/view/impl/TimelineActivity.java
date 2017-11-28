@@ -117,7 +117,6 @@ public final class TimelineActivity extends BaseActivity<TimelinePresenter, Time
         );
     }
 
-
     private void startLoginActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
