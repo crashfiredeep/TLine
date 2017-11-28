@@ -16,9 +16,6 @@
     <string name="action_logout">Logout</string>
     <string name="action_language_en">To English</string>
     <string name="action_language_ar">To Arabic</string>
-    <string name="action_language">العربية</string>
-
-
-
+    <string name="action_language">عربى</string>
 
 </resources>
