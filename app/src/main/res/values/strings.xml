@@ -16,6 +16,10 @@
     <string name="action_logout">Logout</string>
     <string name="action_language_en">To English</string>
     <string name="action_language_ar">To Arabic</string>
-    <string name="action_language">عربى</string>
+    <string name="action_language">العربية</string>
+
+    <string name="action_timeline" translatable="false">Timeline</string>
+    <string name="action_olx_egypt" translatable="false">\@OLXEgypt</string>
+    <string name="action_android_dev" translatable="false">\@AndroidDev</string>
 
 </resources>

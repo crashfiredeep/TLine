@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_timeline"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_user"
+        android:title="@string/action_timeline"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_olx_egypt"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_twitter"
+        android:title="@string/action_olx_egypt"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_android_dev"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_android"
+        android:title="@string/action_android_dev"
+        app:showAsAction="ifRoom" />
+</menu>
