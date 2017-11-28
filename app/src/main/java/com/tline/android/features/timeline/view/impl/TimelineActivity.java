@@ -23,6 +23,7 @@ import com.tline.android.features.timeline.injection.DaggerTimelineViewComponent
 import com.tline.android.features.timeline.injection.TimelineViewModule;
 import com.tline.android.features.timeline.presenter.TimelinePresenter;
 import com.tline.android.features.timeline.view.TimelineView;
+import com.tline.android.utils.LocaleHelper;
 
 import java.util.Locale;
 
@@ -59,8 +60,7 @@ public final class TimelineActivity extends BaseActivity<TimelinePresenter, Time
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
 
-//        setActionBarIcon(R.mipmap.ic_launcher);
-//        setActionBarIconAndTitle(R.mipmap.ic_launcher, getString(R.string.app_name));
+
     }
 
 
@@ -69,30 +69,9 @@ public final class TimelineActivity extends BaseActivity<TimelinePresenter, Time
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
-//
-//         menuItemEn = menu.findItem(R.id.action_language_en);
-//         menuItemAr = menu.findItem(R.id.action_language_ar);
-
-
-
         return true;
     }
 
-//    @Override
-//    public boolean onPrepareOptionsMenu(Menu menu) {
-//
-//        if (getResources().getConfiguration().locale.getLanguage().equals("ar")){
-//            menu.findItem(R.id.action_language_ar).setVisible(false);
-//            menu.findItem(R.id.action_language_en).setVisible(true);
-//
-//
-//        }else{
-//            menu.findItem(R.id.action_language_ar).setVisible(true);
-//            menu.findItem(R.id.action_language_en).setVisible(false);
-//        }
-//
-//        return super.onPrepareOptionsMenu(menu);
-//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -104,20 +83,8 @@ public final class TimelineActivity extends BaseActivity<TimelinePresenter, Time
                 logoutTwitter();
                 startLoginActivity();
                 return true;
-//            case R.id.action_language_en:
-//                Timber.e("R.id.action_language_en");
-//                menuItemEn.setVisible(false);
-//                menuItemAr.setVisible(true);
-//                changeLocale(this, new Locale("en"));
-//                return true;
-//            case R.id.action_language_ar:
-//                Timber.e("R.id.action_language_ar");
-//                menuItemEn.setVisible(true);
-//                menuItemAr.setVisible(false);
-//                changeLocale(this, new Locale("ar"));
-//                return true;
             case R.id.action_language:
-                 switchDirection(this);
+                LocaleHelper.switchLocale(this);
                 return true;
         }
 
@@ -129,34 +96,5 @@ public final class TimelineActivity extends BaseActivity<TimelinePresenter, Time
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
-    }
-
-    public void changeLocale(Activity activity, Locale newLocale) {
-
-        Resources resources = activity.getApplicationContext().getResources();
-        Configuration config = resources.getConfiguration();
-        config.locale = newLocale;
-        config.setLayoutDirection(newLocale);
-        resources.updateConfiguration(config, resources.getDisplayMetrics());
-        activity.recreate();
-    }
-
-    public void switchDirection(Activity activity) {
-        Resources resources = activity.getApplicationContext().getResources();
-        Configuration config = resources.getConfiguration();
-        Locale locale = getLocale(config);
-        config.locale = locale;
-        config.setLayoutDirection(locale);
-        resources.updateConfiguration(config, resources.getDisplayMetrics());
-        activity.recreate();
-    }
-
-    private Locale getLocale(Configuration configuration) {
-        if (configuration.locale.getLanguage().equals("ar")){
-            return new Locale("en");
-        }else {
-
-            return new Locale("ar");
-        }
     }
 }
