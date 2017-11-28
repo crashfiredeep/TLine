@@ -1,13 +1,17 @@
 package com.tline.android.features.timeline.view.impl;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.tline.android.R;
@@ -55,7 +59,10 @@ public final class TimelineActivity extends BaseActivity<TimelinePresenter, Time
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
 
+        setActionBarIcon(R.mipmap.ic_launcher);
     }
+
+
     MenuItem menuItemEn;
     MenuItem menuItemAr;
     @Override
@@ -65,7 +72,25 @@ public final class TimelineActivity extends BaseActivity<TimelinePresenter, Time
          menuItemEn = menu.findItem(R.id.action_language_en);
          menuItemAr = menu.findItem(R.id.action_language_ar);
 
+
+
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        if (getResources().getConfiguration().locale.getLanguage().equals("ar")){
+            menu.findItem(R.id.action_language_ar).setVisible(false);
+            menu.findItem(R.id.action_language_en).setVisible(true);
+
+
+        }else{
+            menu.findItem(R.id.action_language_ar).setVisible(true);
+            menu.findItem(R.id.action_language_en).setVisible(false);
+        }
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -82,41 +107,17 @@ public final class TimelineActivity extends BaseActivity<TimelinePresenter, Time
                 Timber.e("R.id.action_language_en");
                 menuItemEn.setVisible(false);
                 menuItemAr.setVisible(true);
-//                Locale locale = new Locale("en");
-//                Locale.setDefault(locale);
-//
-//                Configuration config = getResources().getConfiguration();
-//                config.setLocale(locale);
-//                createConfigurationContext(config);
-//                getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-
-
-//                ((TextView)findViewById(R.id.textView)).setText(R.string.sample_text);
-                changeLocale(this, new Locale("en_US"));
+                changeLocale(this, new Locale("en"));
                 return true;
             case R.id.action_language_ar:
                 Timber.e("R.id.action_language_ar");
                 menuItemEn.setVisible(true);
                 menuItemAr.setVisible(false);
-//                Locale localea = new Locale("ar");
-//                Locale.setDefault(localea);
-//
-//                Configuration configa = getResources().getConfiguration();
-//                configa.setLocale(localea);
-//                createConfigurationContext(configa);
-//                getResources().updateConfiguration(configa, getResources().getDisplayMetrics());
-//                ((TextView)findViewById(R.id.textView)).setText(R.string.sample_text);
-//                recreate();
-//
                 changeLocale(this, new Locale("ar"));
 
                 return true;
         }
 
-        if (id == R.id.action_logout) {
-            Timber.e("R.id.action_logout");
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -127,21 +128,32 @@ public final class TimelineActivity extends BaseActivity<TimelinePresenter, Time
         finish();
     }
 
-    public static void changeLocale(Context context, Locale locale) {
-//        Configuration conf = context.getResources().getConfiguration();
-//        conf.locale = locale;
-//        Locale.setDefault(locale);
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-//            conf.setLayoutDirection(conf.locale);
-//        }
-//
-//        context.getResources().updateConfiguration(conf, context.getResources().getDisplayMetrics());
+    public void changeLocale(Activity activity, Locale newLocale) {
 
+        Resources resources = activity.getApplicationContext().getResources();
+        Configuration config = resources.getConfiguration();
+        config.locale = newLocale;
+        config.setLayoutDirection(newLocale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
+        activity.recreate();
+    }
 
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
+    public void switchDirection(Context context) {
+        Resources resources = context.getResources();
+        Configuration config = resources.getConfiguration();
+        Locale locale = getLocale(config);
         config.locale = locale;
-        context.getApplicationContext().getResources().updateConfiguration(config, null);
+        config.setLayoutDirection(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
+        recreate();
+    }
+
+    private Locale getLocale(Configuration configuration) {
+        if (configuration.locale.getLanguage().equals("ar")){
+            return new Locale("en");
+        }else {
+
+            return new Locale("ar");
+        }
     }
 }

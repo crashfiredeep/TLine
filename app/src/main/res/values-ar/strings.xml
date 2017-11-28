@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">قائمة تويت</string>
     <string name="action_language_ar">عربى</string>
     <string name="sample_text">مرحبا بكم في النظام</string>
 </resources>
