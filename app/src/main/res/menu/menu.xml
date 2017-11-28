@@ -14,13 +14,13 @@
         <!--android:icon="@drawable/ic_action_language_ar"-->
         <!--app:showAsAction="always"/>-->
 
-    <group android:title="@string/action_language" android:icon="@drawable/ic_action_language" android:checkableBehavior="single">
+    <group android:title="@string/action_language" android:icon="@drawable/ic_action_language" android:checkableBehavior="single" android:visible="false">
 
             <item
                 app:showAsAction="always"
                 android:id="@+id/action_language_en"
                 android:checked="true"
-                android:visible="true"
+                android:visible="false"
                 android:title="@string/action_language_en"/>
             <item
                 app:showAsAction="always"
@@ -30,6 +30,11 @@
 
     </group>
 
+    <item
+        app:showAsAction="always"
+        android:visible="true"
+        android:id="@+id/action_language"
+        android:title="@string/action_language"/>
 
     <item
         android:id="@+id/action_logout"

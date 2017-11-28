@@ -77,7 +77,7 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
 
-        setActionBarIcon(R.mipmap.ic_launcher);
+//        setActionBarIcon(R.mipmap.ic_launcher);
         setButtonListeners();
 
         test();

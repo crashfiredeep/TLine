@@ -61,6 +61,8 @@ public abstract class BaseActivity<P extends BasePresenter<V>, V> extends AppCom
 
         ButterKnife.bind(this);
 
+        setActionBar();
+
         onViewReady(savedInstanceState, getIntent());
     }
 
@@ -155,7 +157,17 @@ public abstract class BaseActivity<P extends BasePresenter<V>, V> extends AppCom
     protected void setActionBarIcon(int ac_icon) {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
+            actionBar.setLogo(ac_icon);
+            actionBar.setDisplayUseLogoEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+        }
+    }
+
+    private void setActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
             actionBar.setLogo(R.mipmap.ic_launcher);
+            actionBar.setTitle(getString(R.string.app_name));
             actionBar.setDisplayUseLogoEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
