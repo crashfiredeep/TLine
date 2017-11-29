@@ -10,6 +10,7 @@ import com.tline.android.R;
 import com.tline.android.features.timeline.fragment.view.holder.RecyclerViewItemHolder;
 import com.twitter.sdk.android.core.models.Tweet;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,17 +19,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewItemHo
     private List<Tweet> mList;
     private Context mContext;
 
-    public RecyclerViewAdapter(Context context, LinkedList<Tweet> tweets) {
-        this.mList = tweets;
+    public RecyclerViewAdapter(Context context) {
+        this.mList = new ArrayList<>();
         mContext = context;
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return this.mList.size();
     }
-
 
     @Override
     public RecyclerViewItemHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {

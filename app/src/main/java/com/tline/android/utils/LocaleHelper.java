@@ -10,25 +10,36 @@ import com.tline.android.features.timeline.activity.view.impl.TimelineActivity;
 
 import java.util.Locale;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 /**
  * Created by Naeem(naeemark@gmail.com)
  * On 28/11/2017.
  * For TLine
  */
 
+@Singleton
 public class LocaleHelper {
 
-    public static void switchLocale(Activity activity) {
-        Resources resources = activity.getResources();
+    private final Context mContext;
+
+    @Inject
+    public LocaleHelper(Context context) {
+        mContext = context;
+    }
+
+    public void switchLocale() {
+        Resources resources = mContext.getResources();
         Configuration config = resources.getConfiguration();
         Locale locale = getNewLocale(config);
         config.locale = locale;
         config.setLayoutDirection(locale);
         resources.updateConfiguration(config, resources.getDisplayMetrics());
-        relaunch(activity);
+        relaunchTimelineActivity();
     }
 
-    private static Locale getNewLocale(Configuration configuration) {
+    private Locale getNewLocale(Configuration configuration) {
         if (configuration.locale.getLanguage().equals("ar")) {
             return new Locale("en");
         } else {
@@ -36,11 +47,11 @@ public class LocaleHelper {
         }
     }
 
-    private static void relaunch(Context context) {
-        Intent i = new Intent(context, TimelineActivity.class);
+    private void relaunchTimelineActivity() {
+        Intent i = new Intent(mContext, TimelineActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(i);
+        mContext.startActivity(i);
     }
 }

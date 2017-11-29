@@ -9,6 +9,8 @@ import com.tline.android.features.timeline.activity.interactor.TimelineInteracto
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 public final class TimelinePresenterImpl extends BasePresenterImpl<TimelineView> implements TimelinePresenter {
     /**
      * The interactor
@@ -27,7 +29,9 @@ public final class TimelinePresenterImpl extends BasePresenterImpl<TimelineView>
     public void onStart(boolean viewCreated) {
         super.onStart(viewCreated);
 
-        // Your code here. Your view is available using mView and will not be null until next onStop()
+        if(viewCreated){
+            initTimeline();
+        }
     }
 
     @Override
@@ -45,5 +49,30 @@ public final class TimelinePresenterImpl extends BasePresenterImpl<TimelineView>
          */
 
         super.onPresenterDestroyed();
+    }
+
+    @Override
+    public void saveSelectedTabIndex(int selectedTabIndex) {
+        mInteractor.saveSelectedTabIndex(selectedTabIndex);
+    }
+
+    @Override
+    public void logout() {
+        assert mView != null;
+        mView.logoutTwitter();
+        mView.launchLoginActivity();
+    }
+
+    @Override
+    public void switchAppLocale() {
+        mInteractor.switchAppLocale();
+    }
+
+
+    private void initTimeline() {
+
+        assert mView != null;
+        mView.setSelectedNavItemId(mInteractor.retrieveSelectedTabIndex());
+        mView.showInitialFragment();
     }
 }

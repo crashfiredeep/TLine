@@ -7,6 +7,8 @@ import com.tline.android.features.timeline.activity.interactor.TimelineInteracto
 import com.tline.android.features.timeline.activity.interactor.impl.TimelineInteractorImpl;
 import com.tline.android.features.timeline.activity.presenter.TimelinePresenter;
 import com.tline.android.features.timeline.activity.presenter.impl.TimelinePresenterImpl;
+import com.tline.android.utils.LocaleHelper;
+import com.tline.android.utils.PreferencesUtils;
 
 import dagger.Module;
 import dagger.Provides;
@@ -14,8 +16,8 @@ import dagger.Provides;
 @Module
 public final class TimelineViewModule {
     @Provides
-    public TimelineInteractor provideInteractor() {
-        return new TimelineInteractorImpl();
+    public TimelineInteractor provideInteractor(PreferencesUtils preferencesUtils, LocaleHelper localeHelper) {
+        return new TimelineInteractorImpl(preferencesUtils, localeHelper);
     }
 
     @Provides

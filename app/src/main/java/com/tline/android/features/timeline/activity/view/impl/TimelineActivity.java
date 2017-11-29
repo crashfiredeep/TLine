@@ -19,13 +19,14 @@ import com.tline.android.features.timeline.activity.injection.TimelineViewModule
 import com.tline.android.features.timeline.activity.presenter.TimelinePresenter;
 import com.tline.android.features.timeline.fragment.view.impl.TweetsFragment;
 import com.tline.android.features.timeline.activity.view.TimelineView;
-import com.tline.android.utils.LocaleHelper;
 import com.twitter.sdk.android.core.TwitterCore;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import timber.log.Timber;
+
+import static com.tline.android.constants.AppConstants.TWITTER_HANDLE_ANDROID_DEV;
+import static com.tline.android.constants.AppConstants.TWITTER_HANDLE_OLX_EGYPT;
 
 public final class TimelineActivity extends BaseActivity<TimelinePresenter, TimelineView> implements TimelineView {
 
@@ -36,8 +37,12 @@ public final class TimelineActivity extends BaseActivity<TimelinePresenter, Time
     @BindView(R.id.bottom_navigation)
     BottomNavigationView mBottomNavigationView;
 
-    private Fragment mContentFragment;
-    private int mSelectedNavItem;
+    private int mSelectedNavItemId;
+
+
+    Fragment mUserTimeline = TweetsFragment.newInstance(TwitterCore.getInstance().getSessionManager().getActiveSession().getUserName());
+    Fragment mOlxEgypt = TweetsFragment.newInstance(TWITTER_HANDLE_OLX_EGYPT);
+    Fragment mAndroidDev = TweetsFragment.newInstance(TWITTER_HANDLE_ANDROID_DEV);
 
     @Override
     protected void setupComponent(@NonNull AppComponent parentComponent) {
@@ -65,20 +70,13 @@ public final class TimelineActivity extends BaseActivity<TimelinePresenter, Time
 
         prepareBottomNavigation();
 
-        mContentFragment = new TweetsFragment();
-
-//        MenuItem selectedItem;
-//        if (savedInstanceState != null) {
-//            mSelectedNavItem = savedInstanceState.getInt(SELECTED_NAV_ITEM, 0);
-//            selectedItem = mBottomNavigationView.getMenu().findItem(mSelectedNavItem);
-//        } else {
-//            selectedItem = mBottomNavigationView.getMenu().getItem(0);
-//        }
-//        selectFragment(selectedItem);
-
-        mBottomNavigationView.setSelectedItemId(0);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+//        mPresenter.start();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -90,14 +88,13 @@ public final class TimelineActivity extends BaseActivity<TimelinePresenter, Time
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        assert mPresenter != null;
         switch (id) {
             case R.id.action_logout:
-                Timber.e("R.id.action_logout");
-                logoutTwitter();
-                startLoginActivity();
+                mPresenter.logout();
                 return true;
             case R.id.action_language:
-                LocaleHelper.switchLocale(this);
+                mPresenter.switchAppLocale();
                 return true;
         }
 
@@ -105,20 +102,6 @@ public final class TimelineActivity extends BaseActivity<TimelinePresenter, Time
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt(SELECTED_NAV_ITEM, mSelectedNavItem);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        mSelectedNavItem = savedInstanceState.getInt(SELECTED_NAV_ITEM);
-//        selectFragment(mBottomNavigationView.getMenu().findItem(mSelectedNavItem));
-
-    }
 
     private void prepareBottomNavigation() {
 
@@ -133,35 +116,54 @@ public final class TimelineActivity extends BaseActivity<TimelinePresenter, Time
         );
     }
 
-    private void startLoginActivity() {
+    private void selectFragment(MenuItem item) {
+
+        assert mPresenter != null;
+        switch (item.getItemId()) {
+            case R.id.action_timeline:
+                mPresenter.saveSelectedTabIndex(0);
+                replaceFragment(mUserTimeline);
+                break;
+            case R.id.action_olx_egypt:
+                mPresenter.saveSelectedTabIndex(1);
+                replaceFragment(mOlxEgypt);
+                break;
+            case R.id.action_android_dev:
+                mPresenter.saveSelectedTabIndex(2);
+                replaceFragment(mAndroidDev);
+                break;
+        }
+
+    }
+
+    @Override
+    public void showInitialFragment() {
+
+        MenuItem selectedItem = mBottomNavigationView.getMenu().getItem(mSelectedNavItemId);
+        if (selectedItem == null) {
+            selectedItem = mBottomNavigationView.getMenu().getItem(0);
+        }
+        selectedItem.setChecked(true);
+        selectFragment(selectedItem);
+    }
+
+    @Override
+    public void setSelectedNavItemId(int mSelectedNavItemId) {
+
+        this.mSelectedNavItemId = mSelectedNavItemId;
+    }
+
+    @Override
+    public void launchLoginActivity() {
+
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
 
-    private void selectFragment(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.action_timeline:
-                Timber.e("R.id.action_timeline");
-                mContentFragment = TweetsFragment.newInstance(TwitterCore.getInstance().getSessionManager().getActiveSession().getUserName());
-                break;
-            case R.id.action_olx_egypt:
-                Timber.e("R.id.action_olx_egypt");
-                mContentFragment = TweetsFragment.newInstance("@OLXEgypt");
-                break;
-            case R.id.action_android_dev:
-                Timber.e("R.id.action_android_dev");
-                mContentFragment = TweetsFragment.newInstance("@AndroidDev");
-                break;
-        }
-
-        // update selected item
-        mSelectedNavItem = item.getItemId();
-
+    private void replaceFragment(Fragment targetFragment) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.container, mContentFragment, mContentFragment.getTag());
+        ft.replace(R.id.container, targetFragment, targetFragment.getTag());
         ft.commit();
-
     }
 }

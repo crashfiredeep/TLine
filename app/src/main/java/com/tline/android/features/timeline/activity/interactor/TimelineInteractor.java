@@ -4,4 +4,9 @@ import com.tline.android.app.interactor.BaseInteractor;
 
 public interface TimelineInteractor extends BaseInteractor {
 
+    void saveSelectedTabIndex(int selectedTabIndex);
+
+    int retrieveSelectedTabIndex();
+
+    void switchAppLocale();
 }

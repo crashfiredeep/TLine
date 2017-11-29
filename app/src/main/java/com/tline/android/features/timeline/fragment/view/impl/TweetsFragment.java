@@ -41,9 +41,9 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
     @Inject
     PresenterFactory<TweetsPresenter> mPresenterFactory;
 
-    protected RecyclerView mRecyclerViewTweets;
+    protected RecyclerView mRecyclerView;
 
-    private LinkedList<Tweet> mTweets;
+//    private LinkedList<Tweet> mTweets;
     private RecyclerViewAdapter mRecyclerViewAdapter;
 
     private String mTwitterHandle;
@@ -70,9 +70,9 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
             mTwitterHandle = savedInstanceState.getString(TARGET_HANDLE);
         }
 
-        ((TimelineActivity) getActivity()).showToast("Handle: " + mTwitterHandle);
+        Timber.e("Handle: " + mTwitterHandle);
 
-        mRecyclerViewTweets = view.findViewById(R.id.recyclerView);
+        mRecyclerView = view.findViewById(R.id.recyclerView);
 
         init();
         testTwitterApiClient();
@@ -111,25 +111,19 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
 
     private void init() {
 
-        mTweets = new LinkedList<>();
-        mRecyclerViewAdapter = new RecyclerViewAdapter(getActivity(), mTweets);
-        mRecyclerViewTweets.setAdapter(mRecyclerViewAdapter);
+        mRecyclerViewAdapter = new RecyclerViewAdapter(getActivity());
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
-        mRecyclerViewTweets.addItemDecoration(itemDecoration);
+        mRecyclerView.addItemDecoration(itemDecoration);
 
-        // Setup layout manager for items
         layoutManager = new LinearLayoutManager(getActivity());
-        // Control orientation of the items
-        // also supports LinearLayoutManager.HORIZONTAL
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        // Optionally customize the position you want to default scroll to
         layoutManager.scrollToPosition(0);
-        // Set layout manager to position the items
-        // Attach the layout manager to the recycler view
-        mRecyclerViewTweets.setLayoutManager(layoutManager);
 
-//        mRecyclerViewTweets.addOnScrollListener(
+        mRecyclerView.setLayoutManager(layoutManager);
+
+//        mRecyclerView.addOnScrollListener(
 //                new EndlessRecyclerViewScrollListener(layoutManager) {
 //                    @Override
 //                    public void onLoadMore(int page, int totalItemsCount) {
@@ -155,9 +149,7 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
         listCall.enqueue(new Callback<List<Tweet>>() {
             @Override
             public void success(Result<List<Tweet>> result) {
-                Timber.e("Size:" + result.data.size());
-                mTweets.addAll(result.data);
-                mRecyclerViewAdapter.notifyDataSetChanged();
+                mRecyclerViewAdapter.addAll(result.data);
             }
 
             @Override
@@ -166,5 +158,11 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
             }
         });
 
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mRecyclerViewAdapter.clear();
     }
 }
