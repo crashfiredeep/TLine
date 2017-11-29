@@ -4,4 +4,5 @@
     <string name="action_language_ar">عربى</string>
     <string name="sample_text">مرحبا بكم في النظام</string>
     <string name="action_language">EN</string>
+    <string name="lbl_button_close">أغلق</string>
 </resources>

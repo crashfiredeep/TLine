@@ -1,12 +1,12 @@
-package com.tline.android.features.timeline.injection;
+package com.tline.android.features.timeline.activity.injection;
 
 import android.support.annotation.NonNull;
 
 import com.tline.android.app.presenter.loader.PresenterFactory;
-import com.tline.android.features.timeline.interactor.TimelineInteractor;
-import com.tline.android.features.timeline.interactor.impl.TimelineInteractorImpl;
-import com.tline.android.features.timeline.presenter.TimelinePresenter;
-import com.tline.android.features.timeline.presenter.impl.TimelinePresenterImpl;
+import com.tline.android.features.timeline.activity.interactor.TimelineInteractor;
+import com.tline.android.features.timeline.activity.interactor.impl.TimelineInteractorImpl;
+import com.tline.android.features.timeline.activity.presenter.TimelinePresenter;
+import com.tline.android.features.timeline.activity.presenter.impl.TimelinePresenterImpl;
 
 import dagger.Module;
 import dagger.Provides;

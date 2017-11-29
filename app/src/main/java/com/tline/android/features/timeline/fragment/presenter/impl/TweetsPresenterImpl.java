@@ -1,25 +1,25 @@
-package com.tline.android.features.timeline.presenter.impl;
+package com.tline.android.features.timeline.fragment.presenter.impl;
 
 import android.support.annotation.NonNull;
 
 import com.tline.android.app.presenter.impl.BasePresenterImpl;
-import com.tline.android.features.timeline.presenter.TimelinePresenter;
-import com.tline.android.features.timeline.view.TimelineView;
-import com.tline.android.features.timeline.interactor.TimelineInteractor;
+import com.tline.android.features.timeline.fragment.presenter.TweetsPresenter;
+import com.tline.android.features.timeline.fragment.view.TweetsView;
+import com.tline.android.features.timeline.fragment.interactor.TweetsInteractor;
 
 import javax.inject.Inject;
 
-public final class TimelinePresenterImpl extends BasePresenterImpl<TimelineView> implements TimelinePresenter {
+public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> implements TweetsPresenter {
     /**
      * The interactor
      */
     @NonNull
-    private final TimelineInteractor mInteractor;
+    private final TweetsInteractor mInteractor;
 
     // The view is available using the mView variable
 
     @Inject
-    public TimelinePresenterImpl(@NonNull TimelineInteractor interactor) {
+    public TweetsPresenterImpl(@NonNull TweetsInteractor interactor) {
         mInteractor = interactor;
     }
 
