@@ -14,7 +14,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> implements TweetsPresenter, TweetsPresenter.OnFetchDataListener {
+public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> implements TweetsPresenter {
     /**
      * The interactor
      */

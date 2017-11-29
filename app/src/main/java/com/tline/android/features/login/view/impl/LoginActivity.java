@@ -77,9 +77,6 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
 
         setButtonListeners();
 
-        if (TwitterCore.getInstance().getSessionManager().getActiveSession() != null) {
-            launchHomeActivity();
-        }
     }
 
     private void setButtonListeners() {
@@ -87,7 +84,8 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
         mLoginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
-                Timber.i(result.data.getUserName());
+                assert mPresenter != null;
+                mPresenter.handleLoginSuccess(result.data);
                 launchHomeActivity();
             }
 
@@ -101,8 +99,8 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
         mLogoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                logoutTwitter();
-                updateUi();
+                assert mPresenter != null;
+                mPresenter.logout();
             }
         });
     }
@@ -116,21 +114,21 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
     }
 
     @Override
-    public void updateUi() {
+    public void showLoginUi() {
+        mLogoutButton.setVisibility(View.GONE);
+        mLoginButton.setVisibility(View.VISIBLE);
+        mUserDpImageView.setImageResource(R.drawable.ic_launcher_round_web);
+    }
 
-        TwitterSession activeSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
+    /**
+     * In-case we need to show Logout button
+     */
+    @Override
+    public void updateUi(String userName) {
 
-        if (activeSession == null) {
-            mLogoutButton.setVisibility(View.GONE);
-            mLoginButton.setVisibility(View.VISIBLE);
-            mUserDpImageView.setImageResource(R.drawable.ic_launcher_round_web);
-        } else {
-
-            mUserNameTextView.setText(getString(R.string.prompt_welcome_prefix, activeSession.getUserName()));
-            //ImageUtils.loadImage(this, mUserDpImageView, appUser.getPhotoUrl());
-            mLogoutButton.setVisibility(View.VISIBLE);
-            mLoginButton.setVisibility(View.GONE);
-        }
+        mUserNameTextView.setText(getString(R.string.prompt_welcome_prefix, userName));
+        mLogoutButton.setVisibility(View.VISIBLE);
+        mLoginButton.setVisibility(View.GONE);
     }
 
     @Override
