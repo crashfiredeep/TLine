@@ -11,7 +11,12 @@ A mocked application for Stream and Timeline.
 
 ### Application Flow ###
 
-_to be provided later_
+- A: User Clicks on App Icon for device
+- B: Splash appear
+- C: After splash delay, Login Screen Appears
+- D: By Clicking login, it launches authentication screen for Twitter Kit
+- E: On Successful login, you will see Timeline screen, with three tabs
+- F: Actionbar button is there to switch the app language and logout
 
 ## How do I get set up? ##
 
@@ -50,11 +55,6 @@ Please sync and resolve dependencies
 - [`SharedPreferences`](https://developer.android.com/reference/android/content/SharedPreferences.html) are used for local persistance of preferences _(if required)_
 
 
-#### PoJo Converters: ####
-
-- API-response DTOs are created by using [JSON2Schema](http://www.jsonschema2pojo.org/)
-
-
 ### Resources ###
 
 - [Dagger-Rx-Database-MVP](https://github.com/filippella/Dagger-Rx-Database-MVP)
@@ -91,4 +91,22 @@ The project can be distributed using [Google Play Store](https://github.com/Trip
 
 ## Screenshots ##
 
-_to be provided later_
+![Screenshot](screenshots/0.png)
+![Screenshot](screenshots/1.png)
+![Screenshot](screenshots/2a.png)
+![Screenshot](screenshots/2b.png)
+![Screenshot](screenshots/2c.png)
+![Screenshot](screenshots/2d.png)
+![Screenshot](screenshots/3.png)
+![Screenshot](screenshots/4a.png)
+![Screenshot](screenshots/4b.png)
+![Screenshot](screenshots/5a.png)
+![Screenshot](screenshots/5b.png)
+![Screenshot](screenshots/6a.png)
+![Screenshot](screenshots/6b.png)
+![Screenshot](screenshots/7a.png)
+![Screenshot](screenshots/7b.png)
+![Screenshot](screenshots/8a.png)
+![Screenshot](screenshots/8b.png)
+![Screenshot](screenshots/9a.png)
+![Screenshot](screenshots/9b.png)
