@@ -22,21 +22,20 @@ import javax.inject.Singleton;
 @Singleton
 public class LocaleHelper {
 
-    private final Context mContext;
 
     @Inject
-    public LocaleHelper(Context context) {
-        mContext = context;
+    public LocaleHelper() {
+
     }
 
-    public void switchLocale() {
-        Resources resources = mContext.getResources();
+    public void switchLocale(Activity activity) {
+        Resources resources = activity.getResources();
         Configuration config = resources.getConfiguration();
         Locale locale = getNewLocale(config);
         config.locale = locale;
         config.setLayoutDirection(locale);
         resources.updateConfiguration(config, resources.getDisplayMetrics());
-        relaunchTimelineActivity();
+        relaunchTimelineActivity(activity);
     }
 
     private Locale getNewLocale(Configuration configuration) {
@@ -47,11 +46,11 @@ public class LocaleHelper {
         }
     }
 
-    private void relaunchTimelineActivity() {
-        Intent i = new Intent(mContext, TimelineActivity.class);
+    private void relaunchTimelineActivity(Activity activity) {
+        Intent i = new Intent(activity, TimelineActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mContext.startActivity(i);
+        activity.startActivity(i);
     }
 }

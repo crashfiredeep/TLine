@@ -1,5 +1,6 @@
 package com.tline.android.features.timeline.activity.presenter.impl;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 
 import com.tline.android.app.presenter.impl.BasePresenterImpl;
@@ -8,8 +9,6 @@ import com.tline.android.features.timeline.activity.view.TimelineView;
 import com.tline.android.features.timeline.activity.interactor.TimelineInteractor;
 
 import javax.inject.Inject;
-
-import timber.log.Timber;
 
 public final class TimelinePresenterImpl extends BasePresenterImpl<TimelineView> implements TimelinePresenter {
     /**
@@ -64,8 +63,8 @@ public final class TimelinePresenterImpl extends BasePresenterImpl<TimelineView>
     }
 
     @Override
-    public void switchAppLocale() {
-        mInteractor.switchAppLocale();
+    public void switchAppLocale(Activity activity) {
+        mInteractor.switchAppLocale(activity);
     }
 
 

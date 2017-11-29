@@ -1,5 +1,7 @@
 package com.tline.android.features.timeline.activity.interactor;
 
+import android.app.Activity;
+
 import com.tline.android.app.interactor.BaseInteractor;
 
 public interface TimelineInteractor extends BaseInteractor {
@@ -8,5 +10,5 @@ public interface TimelineInteractor extends BaseInteractor {
 
     int retrieveSelectedTabIndex();
 
-    void switchAppLocale();
+    void switchAppLocale(Activity activity);
 }

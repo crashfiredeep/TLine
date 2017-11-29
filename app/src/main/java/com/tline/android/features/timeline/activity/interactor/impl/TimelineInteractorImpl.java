@@ -1,10 +1,11 @@
 package com.tline.android.features.timeline.activity.interactor.impl;
 
+import android.app.Activity;
+
 import javax.inject.Inject;
 
 import com.tline.android.app.interactor.impl.BaseInteractorImpl;
 import com.tline.android.features.timeline.activity.interactor.TimelineInteractor;
-import com.tline.android.features.timeline.activity.view.impl.TimelineActivity;
 import com.tline.android.utils.LocaleHelper;
 import com.tline.android.utils.PreferencesUtils;
 
@@ -33,7 +34,7 @@ public final class TimelineInteractorImpl extends BaseInteractorImpl implements 
     }
 
     @Override
-    public void switchAppLocale() {
-        mLocaleHelper.switchLocale();
+    public void switchAppLocale(Activity activity) {
+        mLocaleHelper.switchLocale(activity);
     }
 }

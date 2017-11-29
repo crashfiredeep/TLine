@@ -94,7 +94,7 @@ public final class TimelineActivity extends BaseActivity<TimelinePresenter, Time
                 mPresenter.logout();
                 return true;
             case R.id.action_language:
-                mPresenter.switchAppLocale();
+                mPresenter.switchAppLocale(this);
                 return true;
         }
 
