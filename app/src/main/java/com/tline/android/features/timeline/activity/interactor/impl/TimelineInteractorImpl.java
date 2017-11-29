@@ -37,4 +37,9 @@ public final class TimelineInteractorImpl extends BaseInteractorImpl implements 
     public void switchAppLocale(Activity activity) {
         mLocaleHelper.switchLocale(activity);
     }
+
+    @Override
+    public void invalidatePreference() {
+        mPreferencesUtils.clear();
+    }
 }

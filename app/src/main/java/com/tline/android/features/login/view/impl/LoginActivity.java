@@ -75,31 +75,11 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
 
-//        setActionBarIcon(R.mipmap.ic_launcher);
         setButtonListeners();
-
-        test();
 
         if (TwitterCore.getInstance().getSessionManager().getActiveSession() != null) {
             launchHomeActivity();
         }
-    }
-
-    private void test() {
-        TwitterApiClient twitterApiClient = TwitterCore.getInstance().getApiClient();
-        StatusesService statusesService = twitterApiClient.getStatusesService();
-        Call<Tweet> call = statusesService.show(524971209851543553L, null, null, null);
-        call.enqueue(new Callback<Tweet>() {
-            @Override
-            public void success(Result<Tweet> result) {
-                //Do something with result
-                Timber.i("R: " + result.data.text);
-            }
-
-            public void failure(TwitterException exception) {
-                Timber.i("E: " + exception.getMessage());
-            }
-        });
     }
 
     private void setButtonListeners() {
@@ -143,7 +123,7 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
         if (activeSession == null) {
             mLogoutButton.setVisibility(View.GONE);
             mLoginButton.setVisibility(View.VISIBLE);
-            mUserDpImageView.setBackgroundResource(R.drawable.ic_launcher_round_web);
+            mUserDpImageView.setImageResource(R.drawable.ic_launcher_round_web);
         } else {
 
             mUserNameTextView.setText(getString(R.string.prompt_welcome_prefix, activeSession.getUserName()));

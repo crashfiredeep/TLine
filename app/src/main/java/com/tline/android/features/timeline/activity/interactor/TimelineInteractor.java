@@ -11,4 +11,6 @@ public interface TimelineInteractor extends BaseInteractor {
     int retrieveSelectedTabIndex();
 
     void switchAppLocale(Activity activity);
+
+    void invalidatePreference();
 }

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.tline.android.R;
 import com.tline.android.app.injection.AppComponent;
 import com.tline.android.app.presenter.loader.PresenterFactory;
+import com.tline.android.app.view.impl.BaseActivity;
 import com.tline.android.app.view.impl.BaseFragment;
 import com.tline.android.features.timeline.fragment.injection.DaggerTweetsViewComponent;
 import com.tline.android.features.timeline.fragment.injection.TweetsViewModule;
@@ -43,11 +44,9 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
 
     protected RecyclerView mRecyclerView;
 
-//    private LinkedList<Tweet> mTweets;
     private RecyclerViewAdapter mRecyclerViewAdapter;
 
     private String mTwitterHandle;
-    private LinearLayoutManager layoutManager;
 
     public TweetsFragment() {
         // Required empty public constructor
@@ -70,12 +69,9 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
             mTwitterHandle = savedInstanceState.getString(TARGET_HANDLE);
         }
 
-        Timber.e("Handle: " + mTwitterHandle);
-
         mRecyclerView = view.findViewById(R.id.recyclerView);
 
         init();
-        testTwitterApiClient();
 
     }
 
@@ -108,7 +104,6 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
         super.onSaveInstanceState(outState);
     }
 
-
     private void init() {
 
         mRecyclerViewAdapter = new RecyclerViewAdapter(getActivity());
@@ -117,52 +112,29 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
         mRecyclerView.addItemDecoration(itemDecoration);
 
-        layoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
 
         mRecyclerView.setLayoutManager(layoutManager);
 
-//        mRecyclerView.addOnScrollListener(
-//                new EndlessRecyclerViewScrollListener(layoutManager) {
-//                    @Override
-//                    public void onLoadMore(int page, int totalItemsCount) {
-//                        // Triggered only when new data needs to be appended to the list
-//                        // Add whatever code is needed to append new items to the bottom of the list
-//                        Toast.makeText(getApplicationContext(),
-//                                "Loading more...", Toast.LENGTH_SHORT).show();
-//                        // Send an API request to retrieve appropriate data using the offset value as a parameter.
-//                        // Deserialize API response and then construct new objects to append to the adapter
-//                        // Add the new objects to the data source for the adapter
-//                        // For efficiency purposes, notify the adapter of only the elements that got changed
-//                        // curSize will equal to the index of the first element inserted because the list is 0-indexed
-//                        populateTimeLine(true, false);
-//
-//                    }
-//                });
-    }
-
-
-    private void testTwitterApiClient() {
-        TwitterApiClient twitterApiClient = TwitterCore.getInstance().getApiClient();
-        Call<List<Tweet>> listCall = twitterApiClient.getStatusesService().userTimeline(null, mTwitterHandle, 50, null, null, false, true, false, true);
-        listCall.enqueue(new Callback<List<Tweet>>() {
-            @Override
-            public void success(Result<List<Tweet>> result) {
-                mRecyclerViewAdapter.addAll(result.data);
-            }
-
-            @Override
-            public void failure(TwitterException exception) {
-
-            }
-        });
-
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        mRecyclerViewAdapter.clear();
+    public String getTwitterHandle() {
+        return mTwitterHandle;
     }
+
+    @Override
+    public void loadData(List<Tweet> tweets) {
+        mRecyclerViewAdapter.clear();
+        mRecyclerViewAdapter.addAll(tweets);
+    }
+
+    @Override
+    public void showErrorMessage(String message) {
+        ((BaseActivity)getActivity()).showErrorWithMessage(message);
+    }
+
+
 }

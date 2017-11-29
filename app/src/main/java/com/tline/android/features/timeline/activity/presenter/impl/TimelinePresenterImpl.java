@@ -28,26 +28,9 @@ public final class TimelinePresenterImpl extends BasePresenterImpl<TimelineView>
     public void onStart(boolean viewCreated) {
         super.onStart(viewCreated);
 
-        if(viewCreated){
+        if (viewCreated) {
             initTimeline();
         }
-    }
-
-    @Override
-    public void onStop() {
-        // Your code here, mView will be null after this method until next onStart()
-
-        super.onStop();
-    }
-
-    @Override
-    public void onPresenterDestroyed() {
-        /*
-         * Your code here. After this method, your presenter (and view) will be completely destroyed
-         * so make sure to cancel any HTTP call or database connection
-         */
-
-        super.onPresenterDestroyed();
     }
 
     @Override
@@ -59,6 +42,7 @@ public final class TimelinePresenterImpl extends BasePresenterImpl<TimelineView>
     public void logout() {
         assert mView != null;
         mView.logoutTwitter();
+        mInteractor.invalidatePreference();
         mView.launchLoginActivity();
     }
 
@@ -74,4 +58,6 @@ public final class TimelinePresenterImpl extends BasePresenterImpl<TimelineView>
         mView.setSelectedNavItemId(mInteractor.retrieveSelectedTabIndex());
         mView.showInitialFragment();
     }
+
+
 }

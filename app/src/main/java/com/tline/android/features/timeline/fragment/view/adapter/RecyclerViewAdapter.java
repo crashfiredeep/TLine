@@ -11,7 +11,6 @@ import com.tline.android.features.timeline.fragment.view.holder.RecyclerViewItem
 import com.twitter.sdk.android.core.models.Tweet;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewItemHolder> {
