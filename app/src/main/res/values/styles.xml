@@ -23,4 +23,12 @@
         <item name="android:textSize">@dimen/titleTextSize</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="TextFooter" parent="Text">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1.5</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:drawablePadding">@dimen/sep_line_width</item>
+    </style>
+
 </resources>

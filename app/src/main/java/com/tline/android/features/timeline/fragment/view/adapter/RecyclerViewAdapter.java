@@ -35,13 +35,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewItemHo
 
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         View view = inflater.inflate(R.layout.item_list, viewGroup, false);
-        return new RecyclerViewItemHolder(mContext, view, mList);
+        return new RecyclerViewItemHolder(mContext, view);
     }
 
     @Override
     public void onBindViewHolder(RecyclerViewItemHolder viewHolder, int position) {
 
-        viewHolder.bind(mList.get(position));
+        viewHolder.setTweet(mList.get(position));
     }
 
     public void clear() {

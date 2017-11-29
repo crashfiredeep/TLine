@@ -2,23 +2,18 @@ package com.tline.android.features.timeline.fragment.view.holder;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-
-import com.bumptech.glide.Glide;
 import com.tline.android.R;
 import com.tline.android.utils.DateTimeUtils;
+import com.tline.android.utils.DialogUtils;
+import com.tline.android.utils.ImageUtils;
 import com.twitter.sdk.android.core.models.Tweet;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 
 public class RecyclerViewItemHolder extends RecyclerView.ViewHolder
@@ -36,59 +31,44 @@ public class RecyclerViewItemHolder extends RecyclerView.ViewHolder
     @BindView(R.id.imageView_dp)
     ImageView mImageViewProfileImage;
 
-    List<Tweet> mTweets;
     Context mContext;
+    private Tweet mTweet;
 
-    public RecyclerViewItemHolder(Context context, View view, List<Tweet> mTweets) {
+    public RecyclerViewItemHolder(Context context, View view) {
         super(view);
 
-        this.mTweets = mTweets;
         this.mContext = context;
-        // Attach a click listener to the entire row view
-        view.setOnClickListener(this);
+
         ButterKnife.bind(this, view);
+
+        view.setOnClickListener(this);
     }
 
-    // Handles the row being being clicked
+    public void setTweet(Tweet mTweet) {
+        this.mTweet = mTweet;
+        bind();
+    }
+
     @Override
     public void onClick(View view) {
 
-        int position = getLayoutPosition(); // gets item position
-        Tweet tweet = mTweets.get(position);
-        // We can access the data within the views
-        Toast.makeText(mContext, "Loading tweet...", Toast.LENGTH_SHORT).show();
-
-//        Intent i = new Intent(mContext, TweetDetailActivity.class);
-//        i.putExtra("tweet",tweet);
-//        mContext.startActivity(i);
-
-        Timber.i("Tweet:" + tweet.text);
-
+        DialogUtils.showTweetDialog(mContext, mTweet);
     }
 
-    public void bind(Tweet tweet) {
-        this.mTextViewTweetWithImage.setText(tweet.text);
+    private void bind() {
 
-        this.mTextViewUserName.setText(tweet.user.name);
-        this.mTextViewTwitterHandle.setText(mContext.getString(R.string.prefix_screenname, tweet.user.screenName));
+        this.mTextViewUserName.setText(mTweet.user.name);
+        this.mTextViewTimeSend.setText(DateTimeUtils.getRelativeTimeAgo(mTweet.createdAt));
+        this.mTextViewTwitterHandle.setText(mContext.getString(R.string.prefix_screenname, mTweet.user.screenName));
 
-        if (!TextUtils.isEmpty(tweet.user.profileImageUrl)) {
-            Glide.with(mContext).load(tweet.user.profileImageUrl)
-                    .placeholder(R.mipmap.ic_launcher)
-                    .fitCenter()
-                    .into(this.mImageViewProfileImage);
-        }
+        this.mTextViewTweetWithImage.setText(mTweet.text);
 
-        this.mTextViewTimeSend.setText(DateTimeUtils.getRelativeTimeAgo(tweet.createdAt));
+        ImageUtils.loadImage(mContext, this.mImageViewProfileImage, mTweet.user.profileImageUrl);
 
-
-        if (!tweet.entities.media.isEmpty() && tweet.entities.media.get(0).type.equals("photo")) {
-            if (!TextUtils.isEmpty(tweet.text)) {
-                Glide.with(mContext).load(tweet.entities.media.get(0).mediaUrl)
-                        .placeholder(R.mipmap.ic_launcher)
-                        .into(this.mImageViewTweetImage);
-                mImageViewTweetImage.setVisibility(View.VISIBLE);
-            }
+        if (!mTweet.entities.media.isEmpty() && mTweet.entities.media.get(0).type.equals("photo")) {
+            ImageUtils.loadImage(mContext, this.mImageViewTweetImage, mTweet.entities.media.get(0).mediaUrl);
+            mImageViewTweetImage.setVisibility(View.VISIBLE);
         }
     }
 }
+
