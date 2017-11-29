@@ -75,6 +75,8 @@ public final class TimelineActivity extends BaseActivity<TimelinePresenter, Time
 //            selectedItem = mBottomNavigationView.getMenu().getItem(0);
 //        }
 //        selectFragment(selectedItem);
+
+        mBottomNavigationView.setSelectedItemId(0);
     }
 
 
@@ -114,11 +116,12 @@ public final class TimelineActivity extends BaseActivity<TimelinePresenter, Time
         super.onRestoreInstanceState(savedInstanceState);
 
         mSelectedNavItem = savedInstanceState.getInt(SELECTED_NAV_ITEM);
-        selectFragment(mBottomNavigationView.getMenu().findItem(mSelectedNavItem));
+//        selectFragment(mBottomNavigationView.getMenu().findItem(mSelectedNavItem));
 
     }
 
     private void prepareBottomNavigation() {
+
         mBottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
