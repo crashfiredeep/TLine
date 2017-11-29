@@ -24,5 +24,6 @@
     <string name="prefix_screenname">\@%s</string>
     <string name="empty" />
     <string name="lbl_button_close">CLOSE</string>
+    <string name="message_logout">Do yo want to logout?</string>
 
 </resources>

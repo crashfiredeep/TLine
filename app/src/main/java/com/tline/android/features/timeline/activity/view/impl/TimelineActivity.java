@@ -1,5 +1,6 @@
 package com.tline.android.features.timeline.activity.view.impl;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,6 +20,7 @@ import com.tline.android.features.timeline.activity.injection.TimelineViewModule
 import com.tline.android.features.timeline.activity.presenter.TimelinePresenter;
 import com.tline.android.features.timeline.fragment.view.impl.TweetsFragment;
 import com.tline.android.features.timeline.activity.view.TimelineView;
+import com.tline.android.utils.DialogUtils;
 import com.twitter.sdk.android.core.TwitterCore;
 
 import javax.inject.Inject;
@@ -73,12 +75,6 @@ public final class TimelineActivity extends BaseActivity<TimelinePresenter, Time
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-//        mPresenter.start();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
@@ -91,7 +87,7 @@ public final class TimelineActivity extends BaseActivity<TimelinePresenter, Time
         assert mPresenter != null;
         switch (id) {
             case R.id.action_logout:
-                mPresenter.logout();
+                showLogoutDialog();
                 return true;
             case R.id.action_language:
                 mPresenter.switchAppLocale(this);
@@ -165,5 +161,16 @@ public final class TimelineActivity extends BaseActivity<TimelinePresenter, Time
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.container, targetFragment, targetFragment.getTag());
         ft.commit();
+    }
+
+    private void showLogoutDialog() {
+        DialogUtils.showLogoutDialog(this, getString(R.string.message_logout), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                assert mPresenter != null;
+                mPresenter.logout();
+                dialog.dismiss();
+            }
+        });
     }
 }
