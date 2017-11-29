@@ -25,7 +25,7 @@ public final class SplashPresenterImpl extends BasePresenterImpl<SplashView> imp
 
         if (viewCreated) {
             startLoading();
-            if (mInteractor.isSplashDone()) {
+            if (!mInteractor.isSplashDone()) {
                 doSplash();
             } else {
                 launchNextActivity();

@@ -6,4 +6,8 @@ public class AppConstants {
 
     public static final String SHARED_PREFS_NAME = "This_app_Prefs";
 
+    public static final String TWITTER_HANDLE_OLX_EGYPT = "@OLXEgypt";
+
+    public static final String TWITTER_HANDLE_ANDROID_DEV = "@AndroidDev";
+
 }

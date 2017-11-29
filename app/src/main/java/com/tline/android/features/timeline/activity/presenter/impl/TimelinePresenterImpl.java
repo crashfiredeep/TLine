@@ -1,5 +1,6 @@
 package com.tline.android.features.timeline.activity.presenter.impl;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 
 import com.tline.android.app.presenter.impl.BasePresenterImpl;
@@ -27,23 +28,36 @@ public final class TimelinePresenterImpl extends BasePresenterImpl<TimelineView>
     public void onStart(boolean viewCreated) {
         super.onStart(viewCreated);
 
-        // Your code here. Your view is available using mView and will not be null until next onStop()
+        if (viewCreated) {
+            initTimeline();
+        }
     }
 
     @Override
-    public void onStop() {
-        // Your code here, mView will be null after this method until next onStart()
-
-        super.onStop();
+    public void saveSelectedTabIndex(int selectedTabIndex) {
+        mInteractor.saveSelectedTabIndex(selectedTabIndex);
     }
 
     @Override
-    public void onPresenterDestroyed() {
-        /*
-         * Your code here. After this method, your presenter (and view) will be completely destroyed
-         * so make sure to cancel any HTTP call or database connection
-         */
-
-        super.onPresenterDestroyed();
+    public void logout() {
+        assert mView != null;
+        mView.logoutTwitter();
+        mInteractor.invalidatePreference();
+        mView.launchLoginActivity();
     }
+
+    @Override
+    public void switchAppLocale(Activity activity) {
+        mInteractor.switchAppLocale(activity);
+    }
+
+
+    private void initTimeline() {
+
+        assert mView != null;
+        mView.setSelectedNavItemId(mInteractor.retrieveSelectedTabIndex());
+        mView.showInitialFragment();
+    }
+
+
 }

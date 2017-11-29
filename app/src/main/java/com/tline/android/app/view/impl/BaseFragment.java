@@ -12,10 +12,11 @@ import com.tline.android.app.presenter.loader.PresenterFactory;
 import com.tline.android.app.presenter.loader.PresenterLoader;
 import com.tline.android.app.injection.AppComponent;
 import com.tline.android.app.presenter.BasePresenter;
+import com.tline.android.app.view.BaseFragmentView;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class BaseFragment<P extends BasePresenter<V>, V> extends Fragment implements LoaderManager.LoaderCallbacks<P> {
+public abstract class BaseFragment<P extends BasePresenter<V>, V> extends Fragment implements LoaderManager.LoaderCallbacks<P>, BaseFragmentView {
     /**
      * Do we need to call {@link #doStart()} from the {@link #onLoadFinished(Loader, BasePresenter)} method.
      * Will be true if presenter wasn't loaded when {@link #onStart()} is reached
@@ -120,4 +121,14 @@ public abstract class BaseFragment<P extends BasePresenter<V>, V> extends Fragme
      * @param appComponent the app component
      */
     protected abstract void setupComponent(@NonNull AppComponent appComponent);
+
+    @Override
+    public void showLoading() {
+        ((BaseActivity)getActivity()).showLoading();
+    }
+
+    @Override
+    public void hideLoading() {
+        ((BaseActivity)getActivity()).hideLoading();
+    }
 }

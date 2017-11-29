@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.tline.android.R;
 import com.tline.android.app.injection.AppComponent;
 import com.tline.android.app.presenter.loader.PresenterFactory;
+import com.tline.android.app.view.impl.BaseActivity;
 import com.tline.android.app.view.impl.BaseFragment;
 import com.tline.android.features.timeline.fragment.injection.DaggerTweetsViewComponent;
 import com.tline.android.features.timeline.fragment.injection.TweetsViewModule;
@@ -41,13 +42,11 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
     @Inject
     PresenterFactory<TweetsPresenter> mPresenterFactory;
 
-    protected RecyclerView mRecyclerViewTweets;
+    protected RecyclerView mRecyclerView;
 
-    private LinkedList<Tweet> mTweets;
     private RecyclerViewAdapter mRecyclerViewAdapter;
 
     private String mTwitterHandle;
-    private LinearLayoutManager layoutManager;
 
     public TweetsFragment() {
         // Required empty public constructor
@@ -70,12 +69,9 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
             mTwitterHandle = savedInstanceState.getString(TARGET_HANDLE);
         }
 
-        ((TimelineActivity) getActivity()).showToast("Handle: " + mTwitterHandle);
-
-        mRecyclerViewTweets = view.findViewById(R.id.recyclerView);
+        mRecyclerView = view.findViewById(R.id.recyclerView);
 
         init();
-        testTwitterApiClient();
 
     }
 
@@ -108,63 +104,37 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
         super.onSaveInstanceState(outState);
     }
 
-
     private void init() {
 
-        mTweets = new LinkedList<>();
-        mRecyclerViewAdapter = new RecyclerViewAdapter(getActivity(), mTweets);
-        mRecyclerViewTweets.setAdapter(mRecyclerViewAdapter);
+        mRecyclerViewAdapter = new RecyclerViewAdapter(getActivity());
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
-        mRecyclerViewTweets.addItemDecoration(itemDecoration);
+        mRecyclerView.addItemDecoration(itemDecoration);
 
-        // Setup layout manager for items
-        layoutManager = new LinearLayoutManager(getActivity());
-        // Control orientation of the items
-        // also supports LinearLayoutManager.HORIZONTAL
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        // Optionally customize the position you want to default scroll to
         layoutManager.scrollToPosition(0);
-        // Set layout manager to position the items
-        // Attach the layout manager to the recycler view
-        mRecyclerViewTweets.setLayoutManager(layoutManager);
 
-//        mRecyclerViewTweets.addOnScrollListener(
-//                new EndlessRecyclerViewScrollListener(layoutManager) {
-//                    @Override
-//                    public void onLoadMore(int page, int totalItemsCount) {
-//                        // Triggered only when new data needs to be appended to the list
-//                        // Add whatever code is needed to append new items to the bottom of the list
-//                        Toast.makeText(getApplicationContext(),
-//                                "Loading more...", Toast.LENGTH_SHORT).show();
-//                        // Send an API request to retrieve appropriate data using the offset value as a parameter.
-//                        // Deserialize API response and then construct new objects to append to the adapter
-//                        // Add the new objects to the data source for the adapter
-//                        // For efficiency purposes, notify the adapter of only the elements that got changed
-//                        // curSize will equal to the index of the first element inserted because the list is 0-indexed
-//                        populateTimeLine(true, false);
-//
-//                    }
-//                });
+        mRecyclerView.setLayoutManager(layoutManager);
+
+    }
+
+    @Override
+    public String getTwitterHandle() {
+        return mTwitterHandle;
+    }
+
+    @Override
+    public void loadData(List<Tweet> tweets) {
+        mRecyclerViewAdapter.clear();
+        mRecyclerViewAdapter.addAll(tweets);
+    }
+
+    @Override
+    public void showErrorMessage(String message) {
+        ((BaseActivity)getActivity()).showErrorWithMessage(message);
     }
 
 
-    private void testTwitterApiClient() {
-        TwitterApiClient twitterApiClient = TwitterCore.getInstance().getApiClient();
-        Call<List<Tweet>> listCall = twitterApiClient.getStatusesService().userTimeline(null, mTwitterHandle, 50, null, null, false, true, false, true);
-        listCall.enqueue(new Callback<List<Tweet>>() {
-            @Override
-            public void success(Result<List<Tweet>> result) {
-                Timber.e("Size:" + result.data.size());
-                mTweets.addAll(result.data);
-                mRecyclerViewAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void failure(TwitterException exception) {
-
-            }
-        });
-
-    }
 }

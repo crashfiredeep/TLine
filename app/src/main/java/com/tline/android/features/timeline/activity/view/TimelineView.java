@@ -7,4 +7,9 @@ import com.tline.android.app.view.BaseView;
 @UiThread
 public interface TimelineView extends BaseView {
 
+    void showInitialFragment();
+
+    void setSelectedNavItemId(int mSelectedNavItemId);
+
+    void launchLoginActivity();
 }
