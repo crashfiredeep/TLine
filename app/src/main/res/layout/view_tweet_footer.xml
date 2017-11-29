@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/wrapper_footer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/margin_padding_average"
+    android:layout_centerVertical="true"
+    android:visibility="gone"
+    android:layout_weight="5">
+
+    <TextView
+        android:id="@+id/reTweetCount"
+        style="@style/TextFooter"
+        android:drawableStart="@drawable/ic_retweet" />
+
+    <TextView
+        android:id="@+id/likeCount"
+        style="@style/TextFooter"
+        android:drawableStart="@drawable/ic_like" />
+
+
+    <TextView
+        android:layout_weight="2"
+        android:id="@+id/replyCount"
+        style="@style/TextFooter"
+        android:drawableStart="@drawable/ic_reply" />
+
+</LinearLayout>

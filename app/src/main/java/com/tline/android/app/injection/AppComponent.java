@@ -3,6 +3,7 @@ package com.tline.android.app.injection;
 import android.content.Context;
 
 import com.tline.android.app.TLineApp;
+import com.tline.android.utils.LocaleHelper;
 import com.tline.android.utils.PreferencesUtils;
 
 import javax.inject.Singleton;
@@ -18,5 +19,7 @@ public interface AppComponent {
     TLineApp getApp();
 
     PreferencesUtils exposePreferencesUtils();
+
+    LocaleHelper exposeLocaleHelper();
 
 }

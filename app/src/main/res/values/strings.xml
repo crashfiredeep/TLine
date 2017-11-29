@@ -21,5 +21,8 @@
     <string name="action_timeline" translatable="false">Timeline</string>
     <string name="action_olx_egypt" translatable="false">\@OLXEgypt</string>
     <string name="action_android_dev" translatable="false">\@AndroidDev</string>
+    <string name="prefix_screenname">\@%s</string>
+    <string name="empty" />
+    <string name="lbl_button_close">CLOSE</string>
 
 </resources>

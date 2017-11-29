@@ -15,4 +15,9 @@
     <color name="tw__blue_default" tools:override="true">@color/colorPrimary</color>
     <color name="tw__blue_pressed" tools:override="true">@color/colorPrimaryDark</color>
 
+
+    <color name="white">@android:color/white</color>
+    <color name="black">@android:color/black</color>
+    <color name="colorScreenName">#939393</color>
+
 </resources>

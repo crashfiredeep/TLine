@@ -17,6 +17,7 @@ public class PreferencesUtils {
 
     public enum PrefKeys {
         IS_SPLASH_DONE,
+        SELECTED_TAB_INDEX,
     }
 
     private final SharedPreferences mPref;
@@ -30,7 +31,11 @@ public class PreferencesUtils {
         mPref.edit().clear().apply();
     }
 
-    public void putData(String key, String data) {
+    public void putInt(String key, int digit) {
+        mPref.edit().putInt(key, digit).apply();
+    }
+
+    public void putString(String key, String data) {
         mPref.edit().putString(key, data).apply();
     }
 
@@ -38,7 +43,11 @@ public class PreferencesUtils {
         mPref.edit().putBoolean(key, flag).apply();
     }
 
-    public String getData(String key) {
+    public int getInt(String key) {
+        return mPref.getInt(key, -1);
+    }
+
+    public String getString(String key) {
         return mPref.getString(key, null);
     }
 

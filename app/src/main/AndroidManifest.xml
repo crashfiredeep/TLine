@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".features.login.view.impl.LoginActivity" />
-        <activity android:name=".features.timeline.view.impl.TimelineActivity" />
+        <activity android:name=".features.timeline.activity.view.impl.TimelineActivity" />
     </application>
 
 </manifest>
