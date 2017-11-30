@@ -22,6 +22,21 @@ import timber.log.Timber;
 
 public class DialogUtils {
 
+    public static void showLogoutDialog(Context context, String message, DialogInterface.OnClickListener positiveListener) {
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setMessage(message)
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.yes, positiveListener)
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        dialog.show();
+    }
+
     public static void showTweetDialog(Context context, Tweet tweet) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context)
                 .setTitle(tweet.user.name)

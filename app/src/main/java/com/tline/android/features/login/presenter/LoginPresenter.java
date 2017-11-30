@@ -7,6 +7,8 @@ import com.twitter.sdk.android.core.TwitterSession;
 
 public interface LoginPresenter extends BasePresenter<LoginView> {
 
+    void checkSession(TwitterSession activeSession);
+
     void handleLoginSuccess(TwitterSession twitterSession);
 
     void handleLoginFailure(TwitterException twitterException);

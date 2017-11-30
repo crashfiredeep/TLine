@@ -7,7 +7,9 @@ import com.tline.android.app.view.BaseView;
 @UiThread
 public interface LoginView extends BaseView{
 
-    void updateUi();
+    void showLoginUi();
+
+    void updateUi(String userName);
 
     void launchHomeActivity();
 

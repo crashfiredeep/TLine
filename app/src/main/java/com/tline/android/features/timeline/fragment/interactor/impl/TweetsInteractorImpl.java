@@ -38,7 +38,7 @@ public final class TweetsInteractorImpl extends BaseInteractorImpl implements Tw
     }
 
     @Override
-    public void fetchTweets(String twitterHandle, final TweetsPresenter.OnFetchDataListener listener) {
+    public void fetchTweets(String twitterHandle, final OnFetchDataListener listener) {
 
         listener.onStart();
 
