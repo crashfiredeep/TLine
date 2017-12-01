@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface TweetsPresenter extends BasePresenter<TweetsView>, TweetsInteractor.OnFetchDataListener {
 
+    boolean isLoading();
 
-
+    void fetchNextPage(Long maxId);
 }

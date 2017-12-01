@@ -20,6 +20,7 @@ public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> imp
      */
     @NonNull
     private final TweetsInteractor mInteractor;
+    private boolean mIsLoading;
 
     @Inject
     public TweetsPresenterImpl(@NonNull TweetsInteractor interactor) {
@@ -57,11 +58,12 @@ public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> imp
     private void fetchData() {
         assert mView != null;
         String twitterHandle = mView.getTwitterHandle();
-        mInteractor.fetchTweets(twitterHandle, this);
+        mInteractor.fetchTweets(twitterHandle, null, this);
     }
 
     @Override
     public void onStart() {
+        mIsLoading = true;
         assert mView != null;
         mView.showLoading();
     }
@@ -83,9 +85,25 @@ public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> imp
 
     @Override
     public void onComplete() {
+        mIsLoading = false;
         if (mView != null) {
             mView.hideLoading();
         }
     }
 
+    /**
+     * Retuns status of loading
+     * @return mIsLoading
+     */
+    @Override
+    public boolean isLoading() {
+        return mIsLoading;
+    }
+
+    @Override
+    public void fetchNextPage(Long maxId) {
+        Timber.e("nextPage: "+ maxId);
+        assert mView != null;
+        mInteractor.fetchTweets(mView.getTwitterHandle(), maxId, this);
+    }
 }

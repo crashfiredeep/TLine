@@ -11,7 +11,7 @@ public interface TweetsInteractor extends BaseInteractor {
 
     boolean isNetworkConnected();
 
-    void fetchTweets(String twitterHandle, OnFetchDataListener listener);
+    void fetchTweets(String twitterHandle, Long maxId, OnFetchDataListener listener);
 
     String getErrorString();
 

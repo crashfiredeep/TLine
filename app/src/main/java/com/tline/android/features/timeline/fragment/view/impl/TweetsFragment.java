@@ -15,6 +15,7 @@ import com.tline.android.app.injection.AppComponent;
 import com.tline.android.app.presenter.loader.PresenterFactory;
 import com.tline.android.app.view.impl.BaseActivity;
 import com.tline.android.app.view.impl.BaseFragment;
+import com.tline.android.constants.AppConstants;
 import com.tline.android.features.timeline.fragment.injection.DaggerTweetsViewComponent;
 import com.tline.android.features.timeline.fragment.injection.TweetsViewModule;
 import com.tline.android.features.timeline.fragment.presenter.TweetsPresenter;
@@ -27,6 +28,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsView> implements TweetsView {
     private static final String TARGET_HANDLE = "TARGET_HANDLE";
     private static final String KEY_EXTRA_LIST = "KEY_EXTRA_LIST";
@@ -34,6 +37,8 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
     PresenterFactory<TweetsPresenter> mPresenterFactory;
 
     protected RecyclerView mRecyclerView;
+
+    private LinearLayoutManager mLayoutManager;
 
     private RecyclerViewAdapter mRecyclerViewAdapter;
 
@@ -91,16 +96,55 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
     private void init() {
 
         // sets layout manager
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // creates and sets adapter
         mRecyclerViewAdapter = new RecyclerViewAdapter(getActivity());
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
+
+        // For Pagination
+        mRecyclerView.addOnScrollListener(recyclerViewOnScrollListener);
     }
+
+
+    /**
+     * includes utility functions required for pagination
+     */
+    private RecyclerView.OnScrollListener recyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
+
+
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            int visibleItemCount = mLayoutManager.getChildCount();
+            int totalItemCount = mLayoutManager.getItemCount();
+            int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
+
+            assert mPresenter != null;
+            if (!mPresenter.isLoading()) {
+                if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                        && firstVisibleItemPosition >= 0
+                        && totalItemCount >= AppConstants.DEFAULT_PAGE_SIZE) {
+                    loadNextPage();
+                }
+            }
+        }
+
+        private void loadNextPage() {
+            assert mPresenter != null;
+            mPresenter.fetchNextPage(mList.get(mList.size() - 1).id);
+        }
+    };
 
     /**
      * Getter
+     *
      * @return mTwitterHandle
      */
     @Override
@@ -110,6 +154,7 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
 
     /**
      * Getter
+     *
      * @return mList
      */
     @Override
@@ -119,6 +164,7 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
 
     /**
      * Called by the presenter
+     *
      * @param tweets
      */
     @Override
@@ -142,4 +188,24 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
         ((BaseActivity) getActivity()).showErrorWithMessage(message);
     }
 
+    /**
+     * Overriding to support pagination bottom loader
+     */
+    @Override
+    public void showLoading() {
+        if (mList.size() == 0) {
+            super.showLoading();
+        } else {
+            getActivity().findViewById(R.id.linearLayout_loader).setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * Overriding to support pagination bottom loader
+     */
+    @Override
+    public void hideLoading() {
+        getActivity().findViewById(R.id.linearLayout_loader).setVisibility(View.GONE);
+        super.hideLoading();
+    }
 }

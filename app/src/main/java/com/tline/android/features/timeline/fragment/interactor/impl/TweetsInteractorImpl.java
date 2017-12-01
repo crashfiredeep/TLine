@@ -19,6 +19,8 @@ import javax.inject.Inject;
 
 import retrofit2.Call;
 
+import static com.tline.android.constants.AppConstants.DEFAULT_PAGE_SIZE;
+
 public final class TweetsInteractorImpl extends BaseInteractorImpl implements TweetsInteractor {
 
     private final Context mContext;
@@ -38,11 +40,11 @@ public final class TweetsInteractorImpl extends BaseInteractorImpl implements Tw
     }
 
     @Override
-    public void fetchTweets(String twitterHandle, final OnFetchDataListener listener) {
+    public void fetchTweets(String twitterHandle, Long maxId, final OnFetchDataListener listener) {
 
         listener.onStart();
 
-        final Call<List<Tweet>> listCall = mTwitterApiClient.getStatusesService().userTimeline(null, twitterHandle, 50, null, null, false, true, false, true);
+        final Call<List<Tweet>> listCall = mTwitterApiClient.getStatusesService().userTimeline(null, twitterHandle, DEFAULT_PAGE_SIZE, null, maxId, false, true, false, true);
         listCall.enqueue(new Callback<List<Tweet>>() {
             @Override
             public void success(Result<List<Tweet>> result) {
