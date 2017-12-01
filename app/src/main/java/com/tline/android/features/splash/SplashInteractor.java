@@ -7,8 +7,6 @@ public interface SplashInteractor extends BaseInteractor {
 
     boolean isNetworkConnected();
 
-    String getNoNetworkErrorText();
-
     boolean isSplashDone();
 
     void setSpalshDone();

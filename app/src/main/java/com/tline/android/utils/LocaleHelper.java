@@ -53,4 +53,17 @@ public class LocaleHelper {
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(i);
     }
+
+    public void setInitialLocale(Context context, String localeString) {
+        Resources resources = context.getResources();
+        Configuration config = resources.getConfiguration();
+        Locale locale = new Locale((localeString == null) ? "ar" : localeString);
+        config.locale = locale;
+        config.setLayoutDirection(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
+    }
+
+    public String getLocale(Context context) {
+        return context.getResources().getConfiguration().locale.getLanguage();
+    }
 }
