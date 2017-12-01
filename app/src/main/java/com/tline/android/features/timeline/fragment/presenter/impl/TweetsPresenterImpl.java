@@ -31,22 +31,22 @@ public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> imp
         super.onStart(viewCreated);
 
         if (viewCreated) {
-            initLoading();
+            loadData();
         }
     }
 
-    @Override
-    public void onStop() {
-
-        mInteractor.cancelOnGoingHttpRequest();
-        Timber.e("onPresenterStopped()");
-        super.onStop();
+    private void loadData() {
+        assert mView != null;
+        if (mView.getList().isEmpty()) {
+            initLoading();
+        }else{
+            mView.showData();
+        }
     }
-
 
     private void initLoading() {
         if(mInteractor.isNetworkConnected()) {
-            loadData();
+            fetchData();
         }else{
             if (mView != null) {
                 mView.showErrorMessage(mInteractor.getErrorString());
@@ -54,7 +54,7 @@ public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> imp
         }
     }
 
-    private void loadData() {
+    private void fetchData() {
         assert mView != null;
         String twitterHandle = mView.getTwitterHandle();
         mInteractor.fetchTweets(twitterHandle, this);

@@ -22,7 +22,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".features.login.view.impl.LoginActivity" />
-        <activity android:name=".features.timeline.activity.view.impl.TimelineActivity" />
+        <activity
+            android:name=".features.timeline.activity.view.impl.TimelineActivity"
+            android:configChanges="orientation|screenSize" />
     </application>
 
 </manifest>
