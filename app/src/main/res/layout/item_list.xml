@@ -3,7 +3,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="6dp"
     android:foreground="?android:attr/selectableItemBackground"
     card_view:cardCornerRadius="@dimen/card_corner_radius"
     card_view:cardElevation="@dimen/card_corner_radius"
@@ -35,25 +35,7 @@
 
             <include layout="@layout/view_tweet_header" />
 
-            <TextView
-                android:layout_marginTop="@dimen/margin_padding_minimal"
-                android:id="@+id/tvTweetText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:autoLink="all"
-                android:background="@color/white"
-                android:linksClickable="true"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-            <ImageView
-                android:id="@+id/ivTweetImage"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/height_image"
-                android:background="@drawable/bg_row"
-                android:padding="@dimen/margin_padding_minimal"
-                android:scaleType="fitCenter"
-                android:visibility="gone"
-                android:contentDescription="@string/empty" />
+            <include layout="@layout/view_tweet_content" />
 
             <include layout="@layout/view_tweet_footer" />
 

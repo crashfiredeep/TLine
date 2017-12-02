@@ -19,6 +19,8 @@ import javax.inject.Inject;
 
 import retrofit2.Call;
 
+import static com.tline.android.constants.AppConstants.DEFAULT_PAGE_SIZE;
+
 public final class TweetsInteractorImpl extends BaseInteractorImpl implements TweetsInteractor {
 
     private final Context mContext;
@@ -38,15 +40,16 @@ public final class TweetsInteractorImpl extends BaseInteractorImpl implements Tw
     }
 
     @Override
-    public void fetchTweets(String twitterHandle, final OnFetchDataListener listener) {
+    public void fetchTweets(String twitterHandle, final Long maxId, final OnFetchDataListener listener) {
 
         listener.onStart();
 
-        final Call<List<Tweet>> listCall = mTwitterApiClient.getStatusesService().userTimeline(null, twitterHandle, 50, null, null, false, true, false, true);
+        final Call<List<Tweet>> listCall = mTwitterApiClient.getStatusesService().userTimeline(null, twitterHandle, DEFAULT_PAGE_SIZE, null, maxId, false, true, false, true);
         listCall.enqueue(new Callback<List<Tweet>>() {
             @Override
             public void success(Result<List<Tweet>> result) {
-                listener.onSuccess(result.data);
+                List<Tweet> tweets = removeIfDuplicate(maxId, result.data);
+                listener.onSuccess(tweets);
                 listener.onComplete();
             }
 
@@ -59,7 +62,23 @@ public final class TweetsInteractorImpl extends BaseInteractorImpl implements Tw
     }
 
     @Override
-    public String getErrorString() {
+    public String getNetworkErrorString() {
         return mContext.getString(R.string.error_no_network);
     }
+
+    @Override
+    public String getEmptyListErrorString() {
+        return mContext.getString(R.string.error_no_items_found);
+    }
+
+    /**
+     * Checks last element of mList and remove duplication
+     *
+     * @param requestMaxId
+     * @param tweets
+     */
+    private List<Tweet> removeIfDuplicate(Long requestMaxId, List<Tweet> tweets) {
+        return (requestMaxId != null && !tweets.isEmpty() && requestMaxId == tweets.get(0).getId()) ? tweets.subList(1, tweets.size()) : tweets;
+    }
+
 }

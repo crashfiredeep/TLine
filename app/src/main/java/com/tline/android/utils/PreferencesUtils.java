@@ -18,6 +18,7 @@ public class PreferencesUtils {
     public enum PrefKeys {
         IS_SPLASH_DONE,
         SELECTED_TAB_INDEX,
+        APP_LOCALE,
     }
 
     private final SharedPreferences mPref;

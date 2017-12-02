@@ -15,5 +15,9 @@ public interface TweetsView extends BaseFragmentView {
 
     void loadData(List<Tweet> tweets);
 
+    void showData();
+
     void showErrorMessage(String message);
+
+    List<Tweet> getList();
 }
