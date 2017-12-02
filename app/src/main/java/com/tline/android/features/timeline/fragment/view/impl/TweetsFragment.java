@@ -15,7 +15,6 @@ import com.tline.android.app.injection.AppComponent;
 import com.tline.android.app.presenter.loader.PresenterFactory;
 import com.tline.android.app.view.impl.BaseActivity;
 import com.tline.android.app.view.impl.BaseFragment;
-import com.tline.android.constants.AppConstants;
 import com.tline.android.features.timeline.fragment.injection.DaggerTweetsViewComponent;
 import com.tline.android.features.timeline.fragment.injection.TweetsViewModule;
 import com.tline.android.features.timeline.fragment.presenter.TweetsPresenter;
@@ -27,8 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import timber.log.Timber;
 
 public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsView> implements TweetsView {
     private static final String TARGET_HANDLE = "TARGET_HANDLE";
@@ -123,14 +120,12 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
             int visibleItemCount = mLayoutManager.getChildCount();
-            int totalItemCount = mLayoutManager.getItemCount();
+            int itemCount = mLayoutManager.getItemCount();
             int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
 
             assert mPresenter != null;
             if (!mPresenter.isLoading()) {
-                if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
-                        && firstVisibleItemPosition >= 0
-                        && totalItemCount >= AppConstants.DEFAULT_PAGE_SIZE) {
+                if ((visibleItemCount + firstVisibleItemPosition) >= itemCount && firstVisibleItemPosition >= 0) {
                     loadNextPage();
                 }
             }
@@ -169,9 +164,11 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
      */
     @Override
     public void loadData(List<Tweet> tweets) {
-        mList.addAll(tweets);
 
-        showData();
+        if (!isDuplicateOfLast(tweets)) {
+            mList.addAll(tweets);
+            showData();
+        }
     }
 
     /**
@@ -207,5 +204,14 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
     public void hideLoading() {
         getActivity().findViewById(R.id.linearLayout_loader).setVisibility(View.GONE);
         super.hideLoading();
+    }
+
+    /**
+     * Do not update list if the last tweets is already there
+     * @param tweets
+     * @return
+     */
+    private boolean isDuplicateOfLast(List<Tweet> tweets) {
+        return (tweets.size() == 1 && tweets.get(0).id == mList.get(mList.size() - 1).id);
     }
 }
