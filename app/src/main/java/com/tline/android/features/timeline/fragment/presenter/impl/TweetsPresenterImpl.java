@@ -40,17 +40,17 @@ public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> imp
         assert mView != null;
         if (mView.getList().isEmpty()) {
             initLoading();
-        }else{
+        } else {
             mView.showData();
         }
     }
 
     private void initLoading() {
-        if(mInteractor.isNetworkConnected()) {
+        if (mInteractor.isNetworkConnected()) {
             fetchData();
-        }else{
+        } else {
             if (mView != null) {
-                mView.showErrorMessage(mInteractor.getErrorString());
+                mView.showErrorMessage(mInteractor.getNetworkErrorString());
             }
         }
     }
@@ -72,7 +72,11 @@ public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> imp
     public void onSuccess(List<Tweet> tweets) {
 
         if (mView != null) {
-            mView.loadData(tweets);
+            if (tweets.isEmpty()) {
+                mView.showErrorMessage(mInteractor.getEmptyListErrorString());
+            } else {
+                mView.loadData(tweets);
+            }
         }
     }
 
@@ -93,6 +97,7 @@ public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> imp
 
     /**
      * Retuns status of loading
+     *
      * @return mIsLoading
      */
     @Override
@@ -102,7 +107,7 @@ public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> imp
 
     @Override
     public void fetchNextPage(Long maxId) {
-        Timber.e("nextPage: "+ maxId);
+        Timber.e("nextPage: " + maxId);
         assert mView != null;
         mInteractor.fetchTweets(mView.getTwitterHandle(), maxId, this);
     }

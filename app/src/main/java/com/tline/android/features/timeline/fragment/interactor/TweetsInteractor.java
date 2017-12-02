@@ -13,7 +13,9 @@ public interface TweetsInteractor extends BaseInteractor {
 
     void fetchTweets(String twitterHandle, Long maxId, OnFetchDataListener listener);
 
-    String getErrorString();
+    String getNetworkErrorString();
+
+    String getEmptyListErrorString();
 
 
     interface OnFetchDataListener {

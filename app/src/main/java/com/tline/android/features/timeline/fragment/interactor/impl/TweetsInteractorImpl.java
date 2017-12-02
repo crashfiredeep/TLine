@@ -40,7 +40,7 @@ public final class TweetsInteractorImpl extends BaseInteractorImpl implements Tw
     }
 
     @Override
-    public void fetchTweets(String twitterHandle, Long maxId, final OnFetchDataListener listener) {
+    public void fetchTweets(String twitterHandle, final Long maxId, final OnFetchDataListener listener) {
 
         listener.onStart();
 
@@ -48,7 +48,8 @@ public final class TweetsInteractorImpl extends BaseInteractorImpl implements Tw
         listCall.enqueue(new Callback<List<Tweet>>() {
             @Override
             public void success(Result<List<Tweet>> result) {
-                listener.onSuccess(result.data);
+                List<Tweet> tweets = removeIfDuplicate(maxId, result.data);
+                listener.onSuccess(tweets);
                 listener.onComplete();
             }
 
@@ -61,7 +62,23 @@ public final class TweetsInteractorImpl extends BaseInteractorImpl implements Tw
     }
 
     @Override
-    public String getErrorString() {
+    public String getNetworkErrorString() {
         return mContext.getString(R.string.error_no_network);
     }
+
+    @Override
+    public String getEmptyListErrorString() {
+        return mContext.getString(R.string.error_no_items_found);
+    }
+
+    /**
+     * Checks last element of mList and remove duplication
+     *
+     * @param requestMaxId
+     * @param tweets
+     */
+    private List<Tweet> removeIfDuplicate(Long requestMaxId, List<Tweet> tweets) {
+        return (requestMaxId != null && !tweets.isEmpty() && requestMaxId == tweets.get(0).getId()) ? tweets.subList(1, tweets.size()) : tweets;
+    }
+
 }

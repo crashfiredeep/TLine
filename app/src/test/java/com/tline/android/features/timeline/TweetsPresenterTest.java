@@ -1,9 +1,5 @@
 package com.tline.android.features.timeline;
 
-import com.tline.android.features.timeline.activity.interactor.TimelineInteractor;
-import com.tline.android.features.timeline.activity.presenter.TimelinePresenter;
-import com.tline.android.features.timeline.activity.presenter.impl.TimelinePresenterImpl;
-import com.tline.android.features.timeline.activity.view.TimelineView;
 import com.tline.android.features.timeline.fragment.interactor.TweetsInteractor;
 import com.tline.android.features.timeline.fragment.presenter.TweetsPresenter;
 import com.tline.android.features.timeline.fragment.presenter.impl.TweetsPresenterImpl;
@@ -16,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -49,7 +44,7 @@ public class TweetsPresenterTest {
     public void shouldShowError() throws Exception {
 
         when(mInteractor.isNetworkConnected()).thenReturn(false);
-        when(mInteractor.getErrorString()).thenReturn("");
+        when(mInteractor.getNetworkErrorString()).thenReturn("");
 
         mPresenter.onStart(true);
 
