@@ -6,7 +6,6 @@
     <color name="colorAccent">#03394b</color>
     <color name="colorAccentDim">#4403394b</color>
     <color name="colorBackground">#EEEEEE</color>
-    <color name="colorLoader">#FF4081</color>
 
     <!--Overriding from TwitterKit -->
     <color name="tw__blue_default" tools:override="true">@color/colorPrimary</color>

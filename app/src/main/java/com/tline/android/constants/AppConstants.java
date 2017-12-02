@@ -10,6 +10,6 @@ public class AppConstants {
 
     public static final String TWITTER_HANDLE_ANDROID_DEV = "@AndroidDev";
 
-    public static final int DEFAULT_PAGE_SIZE = 20;
+    public static final int DEFAULT_PAGE_SIZE = 30;
 
 }

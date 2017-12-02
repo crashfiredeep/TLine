@@ -5,9 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="36dp"
     android:layout_gravity="bottom|center_horizontal"
-    android:background="@color/colorAccentDim"
+    android:background="@color/colorAccent"
     android:gravity="center"
     android:orientation="horizontal"
+    android:alpha=".75"
     android:visibility="gone"
     tools:showIn="@layout/fragment_tweets">
 
@@ -23,7 +24,7 @@
         android:id="@+id/textView"
         style="@style/Text"
         android:text="@string/loading_more"
-        android:textColor="@color/colorLoader"
+        android:textColor="@color/white"
         android:textStyle="bold|italic" />
 
 </LinearLayout>

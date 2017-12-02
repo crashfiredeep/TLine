@@ -165,10 +165,9 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
     @Override
     public void loadData(List<Tweet> tweets) {
 
-        if (!isDuplicateOfLast(tweets)) {
-            mList.addAll(tweets);
-            showData();
-        }
+        List<Tweet> checkedTweets = removeIfDuplicate(tweets);
+        mList.addAll(checkedTweets);
+        showData();
     }
 
     /**
@@ -207,11 +206,21 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
     }
 
     /**
+     * Checks last element of mList and remove duplication
+     *
+     * @param tweets
+     */
+    private List<Tweet> removeIfDuplicate(List<Tweet> tweets) {
+        return ((isDuplicateOfLast(tweets)) ? tweets.subList(1, tweets.size()) : tweets);
+    }
+
+    /**
      * Do not update list if the last tweets is already there
+     *
      * @param tweets
      * @return
      */
     private boolean isDuplicateOfLast(List<Tweet> tweets) {
-        return (tweets.size() == 1 && tweets.get(0).id == mList.get(mList.size() - 1).id);
+        return (!mList.isEmpty() && tweets.get(0).id == mList.get(mList.size() - 1).id);
     }
 }
