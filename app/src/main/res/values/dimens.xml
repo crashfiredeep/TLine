@@ -15,12 +15,11 @@
     <dimen name="height_poster_progress">36dp</dimen>
     <dimen name="stroke_width_thin">1dp</dimen>
     <dimen name="stroke_width">2dp</dimen>
-    <dimen name="card_corner_radius">4dp</dimen>
+    <dimen name="card_corner_radius">3dp</dimen>
 
     <!--Text Size-->
     <dimen name="textSize">15sp</dimen>
     <dimen name="titleTextSize">16sp</dimen>
-
 
     <dimen name="height_image">180dp</dimen>
 

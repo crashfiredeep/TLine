@@ -20,6 +20,7 @@ public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> imp
      */
     @NonNull
     private final TweetsInteractor mInteractor;
+    private boolean mIsLoading;
 
     @Inject
     public TweetsPresenterImpl(@NonNull TweetsInteractor interactor) {
@@ -31,37 +32,42 @@ public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> imp
         super.onStart(viewCreated);
 
         if (viewCreated) {
-            initLoading();
-        }
-    }
-
-    @Override
-    public void onStop() {
-
-        mInteractor.cancelOnGoingHttpRequest();
-        Timber.e("onPresenterStopped()");
-        super.onStop();
-    }
-
-
-    private void initLoading() {
-        if(mInteractor.isNetworkConnected()) {
             loadData();
-        }else{
-            if (mView != null) {
-                mView.showErrorMessage(mInteractor.getErrorString());
-            }
         }
     }
 
     private void loadData() {
+
+        assert mView != null;
+        if (mView.getList().isEmpty()) {
+            initLoading();
+        } else {
+            mView.showData();
+        }
+    }
+
+    private void initLoading() {
+
+        if (mInteractor.isNetworkConnected()) {
+            fetchData();
+        } else {
+            if (mView != null) {
+                mView.showErrorMessage(mInteractor.getNetworkErrorString());
+            }
+        }
+    }
+
+    private void fetchData() {
+
         assert mView != null;
         String twitterHandle = mView.getTwitterHandle();
-        mInteractor.fetchTweets(twitterHandle, this);
+        mInteractor.fetchTweets(twitterHandle, null, this);
     }
 
     @Override
     public void onStart() {
+
+        mIsLoading = true;
         assert mView != null;
         mView.showLoading();
     }
@@ -70,12 +76,17 @@ public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> imp
     public void onSuccess(List<Tweet> tweets) {
 
         if (mView != null) {
-            mView.loadData(tweets);
+            if (tweets.isEmpty()) {
+                mView.showErrorMessage(mInteractor.getEmptyListErrorString());
+            } else {
+                mView.loadData(tweets);
+            }
         }
     }
 
     @Override
     public void onFailure(String message) {
+
         if (mView != null) {
             mView.showErrorMessage(message);
         }
@@ -83,9 +94,36 @@ public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> imp
 
     @Override
     public void onComplete() {
+
+        mIsLoading = false;
         if (mView != null) {
             mView.hideLoading();
         }
     }
 
+    /**
+     * Returns status of loading
+     *
+     * @return mIsLoading
+     */
+    @Override
+    public boolean isLoading() {
+        return mIsLoading;
+    }
+
+    @Override
+    public void fetchNextPage(Long maxId) {
+
+        Timber.e("nextPage: " + maxId);
+        assert mView != null;
+        mInteractor.fetchTweets(mView.getTwitterHandle(), maxId, this);
+    }
+
+    @Override
+    public void onRefreshClicked() {
+
+        assert mView != null;
+        mView.getList().clear();
+        initLoading();
+    }
 }

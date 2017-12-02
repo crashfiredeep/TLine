@@ -68,6 +68,8 @@ public class RecyclerViewItemHolder extends RecyclerView.ViewHolder
         if (!mTweet.entities.media.isEmpty() && mTweet.entities.media.get(0).type.equals("photo")) {
             ImageUtils.loadImage(mContext, this.mImageViewTweetImage, mTweet.entities.media.get(0).mediaUrl);
             mImageViewTweetImage.setVisibility(View.VISIBLE);
+        } else {
+            mImageViewTweetImage.setVisibility(View.GONE);
         }
     }
 }
