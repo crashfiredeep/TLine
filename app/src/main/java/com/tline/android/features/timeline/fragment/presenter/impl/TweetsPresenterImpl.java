@@ -37,6 +37,7 @@ public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> imp
     }
 
     private void loadData() {
+
         assert mView != null;
         if (mView.getList().isEmpty()) {
             initLoading();
@@ -46,6 +47,7 @@ public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> imp
     }
 
     private void initLoading() {
+
         if (mInteractor.isNetworkConnected()) {
             fetchData();
         } else {
@@ -56,6 +58,7 @@ public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> imp
     }
 
     private void fetchData() {
+
         assert mView != null;
         String twitterHandle = mView.getTwitterHandle();
         mInteractor.fetchTweets(twitterHandle, null, this);
@@ -63,6 +66,7 @@ public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> imp
 
     @Override
     public void onStart() {
+
         mIsLoading = true;
         assert mView != null;
         mView.showLoading();
@@ -82,6 +86,7 @@ public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> imp
 
     @Override
     public void onFailure(String message) {
+
         if (mView != null) {
             mView.showErrorMessage(message);
         }
@@ -89,6 +94,7 @@ public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> imp
 
     @Override
     public void onComplete() {
+
         mIsLoading = false;
         if (mView != null) {
             mView.hideLoading();
@@ -96,7 +102,7 @@ public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> imp
     }
 
     /**
-     * Retuns status of loading
+     * Returns status of loading
      *
      * @return mIsLoading
      */
@@ -107,8 +113,17 @@ public final class TweetsPresenterImpl extends BasePresenterImpl<TweetsView> imp
 
     @Override
     public void fetchNextPage(Long maxId) {
+
         Timber.e("nextPage: " + maxId);
         assert mView != null;
         mInteractor.fetchTweets(mView.getTwitterHandle(), maxId, this);
+    }
+
+    @Override
+    public void onRefreshClicked() {
+
+        assert mView != null;
+        mView.getList().clear();
+        initLoading();
     }
 }

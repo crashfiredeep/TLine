@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,6 +28,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+
 public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsView> implements TweetsView {
     private static final String TARGET_HANDLE = "TARGET_HANDLE";
     private static final String KEY_EXTRA_LIST = "KEY_EXTRA_LIST";
@@ -36,6 +39,8 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
     protected RecyclerView mRecyclerView;
 
     private LinearLayoutManager mLayoutManager;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private RecyclerViewAdapter mRecyclerViewAdapter;
 
@@ -62,6 +67,7 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
             mTwitterHandle = savedInstanceState.getString(TARGET_HANDLE);
         }
 
+        mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         mRecyclerView = view.findViewById(R.id.recyclerView);
 
         init();
@@ -102,6 +108,15 @@ public final class TweetsFragment extends BaseFragment<TweetsPresenter, TweetsVi
 
         // For Pagination
         mRecyclerView.addOnScrollListener(recyclerViewOnScrollListener);
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                assert mPresenter != null;
+                mPresenter.onRefreshClicked();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
 

@@ -12,4 +12,6 @@ public interface TweetsPresenter extends BasePresenter<TweetsView>, TweetsIntera
     boolean isLoading();
 
     void fetchNextPage(Long maxId);
+
+    void onRefreshClicked();
 }
